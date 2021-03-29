@@ -1,1 +1,150 @@
-Hello !
+====== TITRE ======
+
+====== CE QU IL NOUS FAUT ! (TO DO LIST) ======
+
+NOTE : Ne pas oublier qu'on a les fonctions "algorithm" de la STL pour tout ce qui est recherches, remplissage, action, ...
+
+--> ECS
+	--> Entity --(POOL)
+	--> Composants (= classe mere) --(POOL)
+		--> ComposantsHéritier (Transform, ...)
+
+	X --> systemes (= classe mere)
+		--> SystemesHeriteir (ShootSystem, TranslateSystem, ...)
+
+	--> World => Contient tout ce qui est perform dednas (&Entity, &Composants, &Systemes Agissant sur le world)
+		--> Pool Entity
+		--> Pool Composants
+		--> Array de systemes
+
+X --> Pooling (Essayer de faire un truc générique réutilisable)
+	(--> Pool Entity)
+	(--> Pool Composants)
+	(--> (Systeme d'identification ?) )
+
+--> System de tag ( FindObjectsWithTag() )
+	--> (= Composants Spéciale ?)
+	--> (= une string comme sur unity ?)
+	--> (= une enum ?)
+
+--> Hachage string
+	--> CF https://create.stephan-brumme.com/fnv-hash/
+	--> Permet d'optimiser les string en gros
+	--> Les comparer plus facilement etc
+	--> Après faut comprendre comment utiliser
+
+--> Réfléchir au différents Composants
+	--> Comp
+
+--> Réfléchir au différents Systèmes
+	--> Sys
+
+
+====== GESTION DE COMPOSANT / SYSTEM & GAME OBJECTS ======
+
+Plusieurs GO avec un composant BEHAVIOR :
+--> 1. Boucle banal classique = itérer sur les GO et pour chaque, on itere sur les Composants
+X --> 2. Plutot que prendre un GO, on va avoir une Upadate en phase : D'abord j'update tou tles RD, puis Physics, ...
+--> 3. Je crée une sous sutrcture qui va gérer les composant qui va communiquer avec le reste des objets
+
+X --> PS. Systeme d'enregistrement ou les composant s'enregistre dans le system (==> ECS, un Composant s'enregistre dans un System, pour que le system y ai acces !)
+
+Class SystemA
+{
+	std:vector<ComposantA&> allC;
+
+	// Event ==> composantA subscribe
+
+	public void Update(ComposantA& c)
+	{
+		//do something
+		if(!c.isActive())
+			return;
+
+
+	}
+
+	public void Process()
+	{
+		foreach(c in allC)
+			Update(c)
+	}
+
+}
+
+
+====== Hachage String (FName, FString, ...) ======
+
+Remplacer une chaine de caractere par une valeur plus courte (ex 32 bits)
+Ce qui permet d'accelerer les comparaisons string-string par des int-int
+De plus on pourrait dans certains cas se passer totalement d'une string et la remplacer completement par sa valeur de hash
+
+https://create.stephan-brumme.com/fnv-hash/
+
+A noter que l'on peut conserver le front-end de std::string avec des classes customs en heritant de std::basic_string<>
+
+Voir egalement la structure FName de l'Unreal Engine (par opposition à FString) comme exemple d'utilisation mixée de hash et string dans une structure
+https://docs.unrealengine.com/en-US/ProgrammingAndScripting/ProgrammingWithCPP/UnrealArchitecture/StringHandling/FName/index.html
+
+
+====== Pooling ======
+
+
+
+
+
+
+====== QUESTION ======
+
+- Par ou commencer ? TODO LIST
+--> ECS
+--> Pooling
+--> System de tag (FindObjectsWithTag())
+--> Hachage string
+--> Réfléchir au différents Composants
+--> Réfléchir au différents Systèmes
+
+
+- ECS
+--> Recréé le system d'ecs de unity par exemple (Composant, System, Entity)
+--> Threading (JobSystem, etc)
+--> 3 Elements : Entity - Composants - Systemes
+	-> Entity = ID, un object vide sur lequel on va ppliaquer divers composant
+	-> Composants = "Behvior" (Transform, collider, physic, ...) qui sera accroché à une entity (soit le composants ref l'entity, soit l'inverse, soirt autre)
+	-> System = Fonction de gameplay qui agit sur les Composants / Combinaisont de composants données (Exemple : ShootSystem agit les )
+
+
+- Hachage string ?
+--> fnv ==> transformer une String en Entier (implémenter fnv-hash)
+--> On remplace les operation par des entiers https://create.stephan-brumme.com/fnv-hash/
+
+
+- Conseil pour pooling ? ==> quel structure ?
+--> commencer par un vector
+--> Pour chaque Composants (Entity, composnats, ...) il faut un sub-system de Pooling
+
+
+- Alloué uniquement le necesasire ? (Exemple : Mode zombie COD)
+--> C'est judicieux
+--> Grosse zone pour faire nos allocations ==> Reserver des sous zones pour allouer autant d'objet que necessaire
+--> Liste chainée de zone
+
+
+- Systems (ecS)
+--> Le systeme manage des composants
+--> Le systeme manage pas n'importe quoi
+--> Remplir des list : le systeme contient les composants qu'il doit updater
+--> Pourquoi pas stocker les entities qui ont la combinaison de composants necessaires
+
+Exemple : 30 composant et tableau Bool, vérifier ce bool si ce composant est use par une entité
+donc on parcourt l'ensemble des C d'un certains type et update que ceux actif
+
+
+- Comment filtrer de manière efficiente du coup ?
+Dans Unity c'est la notion d'Archetype du coup
+--> ID pour composant (ou tag) 
+	==> Chaque composant = puissance de 2, et si j'ai que 32 composant dans le jeu, je peux me suffir d'un entier
+		Utiliser des fonctions qui permettre de retrouver les bits mis à 1 = composants actif sur l'entity E
+		On peut mélanger ça avec des tag explicite
+
+
