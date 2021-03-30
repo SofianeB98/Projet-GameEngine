@@ -161,6 +161,7 @@
     <ClInclude Include="EngineContext.h" />
     <ClInclude Include="EcsBase.h" />
     <ClInclude Include="EntityManager.h" />
+    <ClInclude Include="fnv.h" />
     <ClInclude Include="GenericPool.h" />
     <ClInclude Include="IComponentArray.h" />
     <ClInclude Include="InfraStructure.h" />

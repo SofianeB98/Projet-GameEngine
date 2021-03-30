@@ -2,20 +2,23 @@
 #include <memory>
 #include <unordered_map>
 
+
+#include "fnv.h"
 #include "IComponentArray.h"
 
 namespace ECS
 {
 	class ComponentManager
 	{
-		std::unordered_map<const char*, ComponentType> component_types;
-		std::unordered_map<const char*, std::shared_ptr<IComponentArray>> component_arrays;
+		std::unordered_map</*const char**/uint32_t, ComponentType> component_types;
+		std::unordered_map</*const char**/uint32_t, std::shared_ptr<IComponentArray>> component_arrays;
 		ComponentType next_component_type;
 
 		template <typename T>
 		std::shared_ptr<ComponentArray<T>> GetComponentArray()
 		{
-			const char* typeName = typeid(T).name();
+			//const char* typeName = typeid(T).name();
+			uint32_t typeName = FNV::fnv1a(typeid(T).name());
 
 			assert(this->component_types.find(typeName) != component_types.end(), "Ce component array existe po");
 
@@ -26,7 +29,8 @@ namespace ECS
 		template <typename T>
 		void RegisterComponent()
 		{
-			const char* typeName = typeid(T).name();
+			//const char* typeName = typeid(T).name();
+			uint32_t typeName = FNV::fnv1a(typeid(T).name());
 
 			assert(this->component_types.find(typeName) == this->component_types.end(), "Ce component array existe deja !");
 
@@ -48,8 +52,9 @@ namespace ECS
 		template <typename T>
 		ComponentType GetComponentType()
 		{
-			const char* typeName = typeid(T).name();
-
+			//const char* typeName = typeid(T).name();
+			uint32_t typeName = FNV::fnv1a(typeid(T).name());
+			
 			assert(this->component_types.find(typeName) != component_types.end(), "Ce component array existe po");
 
 			return this->component_types[typeName];

@@ -16,6 +16,9 @@
     <Filter Include="Fichiers sources\ECS">
       <UniqueIdentifier>{490dcb15-cfed-4d88-a476-3799b6d4ecfe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers sources\Utils">
+      <UniqueIdentifier>{135af03a-7315-47f3-8ffd-efcf9bbf4d4a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Timer.cpp">
@@ -79,6 +82,9 @@
     </ClInclude>
     <ClInclude Include="SystemBase.h">
       <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="fnv.h">
+      <Filter>Fichiers sources\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
