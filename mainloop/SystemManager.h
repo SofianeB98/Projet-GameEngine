@@ -5,15 +5,16 @@
 #include "EcsBase.h"
 #include "SystemBase.h"
 #include <assert.h>
-
+#include "fnv.h"
 namespace ECS {
 
 	class SystemManager {
 	public:
 		template<typename T>
 		std::shared_ptr<T> RegisterSystem() {
-			const char* typeName = typeid(T).name();
-			
+			//const char* typeName = typeid(T).name();
+			uint32_t typeName = FNV::fnv1a(typeid(T).name());
+			assert(systems.find(typeName) == systems.end() && "System " << typeid(T).name() << " already registered");
 			SystemBase system = std::make_shared<T>();
 			systems.insert({ typeName, system });
 			return system;
@@ -22,7 +23,8 @@ namespace ECS {
 
 		template<typename T>
 		void SetUniqueKey(UniqueKey key) {
-			const char* typeName = typeid(T).name();
+			uint32_t typeName = FNV::fnv1a(typeid(T).name());
+			assert(systems.find(typeName) != systems.end() && "System " << typeid(T).name() << " not registered");
 			keys.insert({ typeName, key });
 		}
 
@@ -54,7 +56,7 @@ namespace ECS {
 		}
 
 	private:
-		std::unordered_map<const char*, UniqueKey> keys;
-		std::unordered_map < const char*, std::shared_ptr<SystemBase>> systems;
+		std::unordered_map<uint32_t, UniqueKey> keys;
+		std::unordered_map <uint32_t, std::shared_ptr<SystemBase>> systems;
 	};
 }
