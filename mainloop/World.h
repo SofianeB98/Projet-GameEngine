@@ -88,12 +88,38 @@ namespace ECS
 
 		
 #pragma region System
-		template <typename T>
-		std::shared_ptr<T> RegisterSystem()
+		template<typename T>
+		UniqueKey CreateSystemUniqueKey()
 		{
-			return this->system_manager->RegisterSystem<T>();
+			static UniqueKey k;
+			return k;
+		}
+		
+		template<typename T, typename... C>
+		UniqueKey CreateSystemUniqueKey(T value, C... c)
+		{
+			static UniqueKey k;
+			k.set(GetComponentType<T>(), true);
+			return CreateSystemUniqueKey<T>(c...);
+		}
+		
+		template <typename T, typename ...C>
+		std::shared_ptr<T> RegisterSystem(C ...c)
+		{
+
+			std::cout << "Je commence a cree la key ! " << std::endl;
+			UniqueKey key;
+
+			key = CreateSystemUniqueKey(c...);
+
+			
+			SetSystemUniqueKey<T>(key);
+			
+			//auto sys = this->system_manager->RegisterSystem<T>();
+			return nullptr;
 		}
 
+		
 		template <typename T>
 		void SetSystemUniqueKey(UniqueKey k)
 		{

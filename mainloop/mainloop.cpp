@@ -17,6 +17,8 @@
 #include <vector>
 #include <thread>
 #include "JobSystem.h"
+#include "SystemTest.h"
+
 namespace ESGI
 {
 	//
@@ -119,7 +121,7 @@ namespace ESGI
 
 		bool Initialize()
 		{
-			JobSystem::Initialize();
+			//JobSystem::Initialize();
 			bool allOk = true;
 			for (auto * core : m_cores) {
 				allOk &= core->Initialize();
@@ -187,9 +189,21 @@ namespace ESGI
 	};
 }
 
+#include "World.h"
 
 int main(void)
 {
+	//ECS::SystemManager a;
+
+	//a.SetUniqueKey(ECS::ComponentBase(), ECS::Transform(), ECS::Transform(), ECS::Transform());
+
+	ECS::World w;
+	w.Init();
+
+	w.RegisterSystem<Tests::SystemTest>(ECS::ComponentBase(), ECS::Transform());
+
+	
+	
 	using namespace ESGI;
 	
 	Application gameEngine;

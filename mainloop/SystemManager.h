@@ -5,7 +5,9 @@
 #include "EcsBase.h"
 #include "SystemBase.h"
 #include <assert.h>
+#include "ComponentBase.h"
 #include "fnv.h"
+
 namespace ECS {
 
 	class SystemManager {
@@ -14,8 +16,8 @@ namespace ECS {
 		std::shared_ptr<T> RegisterSystem() {
 			//const char* typeName = typeid(T).name();
 			uint32_t typeName = FNV::fnv1a(typeid(T).name());
-			assert(systems.find(typeName) == systems.end() && "System " << typeid(T).name() << " already registered");
-			SystemBase system = std::make_shared<T>();
+			assert(systems.find(typeName) == systems.end(), "System " << typeid(T).name() << " already registered");
+			auto system = std::make_shared<T>();
 			systems.insert({ typeName, system });
 			return system;
 		}
@@ -24,10 +26,24 @@ namespace ECS {
 		template<typename T>
 		void SetUniqueKey(UniqueKey key) {
 			uint32_t typeName = FNV::fnv1a(typeid(T).name());
-			assert(systems.find(typeName) != systems.end() && "System " << typeid(T).name() << " not registered");
+			assert(systems.find(typeName) != systems.end(), "System " << typeid(T).name() << " not registered");
 			keys.insert({ typeName, key });
 		}
 
+		void SetUniqueKey()
+		{
+			// RIEN
+			//std::cout << "UNIQUE KEY END " << std::endl;
+		}
+		
+		template<typename T, typename... C>
+		void SetUniqueKey(T value, C... c)
+		{
+			//std::cout << "Je passe ici !" << typeid(value).name() << std::endl;
+			
+			SetUniqueKey(c...);
+		}
+		
 		void EntityDestroyed(Entity entity) {
 			for (auto const& pair : systems) {
 				auto const& system = pair.second;

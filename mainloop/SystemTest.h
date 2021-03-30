@@ -11,7 +11,7 @@ namespace Tests
 		{
 			JobSystem::Execute(
 				[]() {
-					std::cout << "System " << typeid(this).name() << " Executed";
+					std::cout << "System " << typeid(SystemTest).name() << " Executed";
 				}
 			);
 		}
