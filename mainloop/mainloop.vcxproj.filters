@@ -13,11 +13,11 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Fichiers sources\ECS">
+      <UniqueIdentifier>{490dcb15-cfed-4d88-a476-3799b6d4ecfe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Engine.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="Timer.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
@@ -27,6 +27,15 @@
     <ClCompile Include="mainloop.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="Engine.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="GenericPool.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityManager.cpp">
+      <Filter>Fichiers sources\ECS</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Utils.h">
@@ -35,17 +44,35 @@
     <ClInclude Include="Timer.h">
       <Filter>Fichiers sources</Filter>
     </ClInclude>
-    <ClInclude Include="InfraStructure.h">
-      <Filter>Fichiers sources</Filter>
-    </ClInclude>
     <ClInclude Include="Input.h">
       <Filter>Fichiers sources</Filter>
     </ClInclude>
-    <ClInclude Include="Engine.h">
+    <ClInclude Include="InfraStructure.h">
       <Filter>Fichiers sources</Filter>
     </ClInclude>
     <ClInclude Include="EngineContext.h">
       <Filter>Fichiers sources</Filter>
     </ClInclude>
+    <ClInclude Include="Engine.h">
+      <Filter>Fichiers sources</Filter>
+    </ClInclude>
+    <ClInclude Include="GenericPool.h">
+      <Filter>Fichiers sources</Filter>
+    </ClInclude>
+    <ClInclude Include="EcsBase.h">
+      <Filter>Fichiers sources\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityManager.h">
+      <Filter>Fichiers sources\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="IComponentArray.h">
+      <Filter>Fichiers sources\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentManager.h">
+      <Filter>Fichiers sources\ECS</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Design.txt" />
   </ItemGroup>
 </Project>

@@ -9,7 +9,7 @@ NOTE : Ne pas oublier qu'on a les fonctions "algorithm" de la STL pour tout ce q
 	--> Composants (= classe mere) --(POOL)
 		--> ComposantsHéritier (Transform, ...)
 
-	X --> systemes (= classe mere)
+	--> systemes (= classe mere)
 		--> SystemesHeriteir (ShootSystem, TranslateSystem, ...)
 
 	--> World => Contient tout ce qui est perform dednas (&Entity, &Composants, &Systemes Agissant sur le world)
@@ -17,7 +17,7 @@ NOTE : Ne pas oublier qu'on a les fonctions "algorithm" de la STL pour tout ce q
 		--> Pool Composants
 		--> Array de systemes
 
-X --> Pooling (Essayer de faire un truc générique réutilisable)
+--> Pooling (Essayer de faire un truc générique réutilisable)
 	(--> Pool Entity)
 	(--> Pool Composants)
 	(--> (Systeme d'identification ?) )
@@ -87,9 +87,21 @@ Voir egalement la structure FName de l'Unreal Engine (par opposition à FString) 
 https://docs.unrealengine.com/en-US/ProgrammingAndScripting/ProgrammingWithCPP/UnrealArchitecture/StringHandling/FName/index.html
 
 
-====== Pooling ======
+====== ECS ======
 
+On a :
+	--> Entity = un ID = uint_32t pas exemple, pas réellement besoins de classe/struct en soit
+		--> EntityManager = Pseudo Pool d'entity
+		--> Signature = variable de N bit (N = nombre de components), ou chaque bit est à 0 ou 1 et permet de dire si une entity possède ce component
 
+	--> Component = des structures de data
+		--> ComponentType = Unique Component ID
+		--> ComponentArray<T> = Pool de component T qui associe les entity et les components
+		--> ComponentManager = Gere les components, une implem du hachage de string sera judicieuse ici
+
+	--> System = Fonction qui agissent sur une combinaison de component précis
+
+	--> Coordinator = World, référence tout les Manager, et permet de réaliser les meme action afin d'y avoir un seul appelle
 
 
 
