@@ -16,7 +16,7 @@
 #include <iostream>
 #include <vector>
 #include <thread>
-
+#include "JobSystem.h"
 namespace ESGI
 {
 	//
@@ -119,6 +119,7 @@ namespace ESGI
 
 		bool Initialize()
 		{
+			JobSystem::Initialize();
 			bool allOk = true;
 			for (auto * core : m_cores) {
 				allOk &= core->Initialize();
