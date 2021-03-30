@@ -152,6 +152,7 @@
     <ClCompile Include="GenericPool.cpp" />
     <ClCompile Include="mainloop.cpp" />
     <ClCompile Include="Input.cpp" />
+    <ClCompile Include="SystemBase.cpp" />
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -164,6 +165,8 @@
     <ClInclude Include="IComponentArray.h" />
     <ClInclude Include="InfraStructure.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="SystemBase.h" />
+    <ClInclude Include="SystemManager.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>
