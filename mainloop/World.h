@@ -7,7 +7,6 @@
 
 namespace ECS
 {
-
 	class World
 	{
 		std::unique_ptr<EntityManager> entity_manager;
@@ -15,18 +14,35 @@ namespace ECS
 		std::unique_ptr<SystemManager> system_manager;
 
 	public:
-		World()
-		{
-			Init();
-		}
-		
-		void Init()
+		void Initialize()
 		{
 			this->entity_manager = std::make_unique<EntityManager>();
 			this->component_manager = std::make_unique<ComponentManager>();
 			this->system_manager = std::make_unique<SystemManager>();
+
+			//this->entity_manager->Initialize();
+			this->component_manager->Initialize();
+			//this->system_manager->Initialize();
 		}
 
+		void Update(float deltaTime)
+		{
+			system_manager->UpdateSystem(deltaTime);
+		}
+		
+		void DeInitialize()
+		{
+			// DeInitialize all
+			this->system_manager->DeInitialize();
+			this->component_manager->DeInitialize();
+			this->entity_manager->DeInitialize();
+			
+			// Delete all
+			delete system_manager.release();
+			delete component_manager.release();
+			delete entity_manager.release();
+		}
+		
 #pragma region Entity
 		Entity CreateEntity()
 		{
@@ -83,6 +99,20 @@ namespace ECS
 		ComponentType GetComponentType()
 		{
 			return this->component_manager->GetComponentType<T>();
+		}
+
+		template <typename T>
+		bool HasComponent(Entity e)
+		{
+			//do some stuff
+			
+			return true;
+		}
+
+		template <typename T>
+		void FindObjectsWith()
+		{
+			//do some stuff
 		}
 #pragma endregion
 

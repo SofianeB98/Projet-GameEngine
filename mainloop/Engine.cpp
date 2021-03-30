@@ -11,13 +11,15 @@ namespace ESGI {
 	void Engine::ProcessSystems(double elapsedTime)
 	{
 		EngineSystem& system = *m_AIEngine;
-
+		ECS::World& w = *world;
+		
 		system.accumulatedTime += elapsedTime;
 
 		float deltaTime = static_cast<float>(elapsedTime);
 
 		system.Update(deltaTime);
-
+		w.Update(deltaTime);
+		
 		int loops = system.maxIterations;
 		// on sort de la boucle des que l'un des deux tests est faux
 		while ((system.accumulatedTime > system.targetFrameRate) && (loops > 0))
@@ -46,6 +48,12 @@ namespace ESGI {
 
 		m_AIEngine = system;
 
+		ECS::World* w = new ECS::World;
+		w->Initialize();
+		world = w;
+
+
+		
 		std::cout << "[Engine] initialized\n";
 
 		return true;
@@ -57,6 +65,9 @@ namespace ESGI {
 		m_AIEngine->DeInitialize();
 		m_AIEngine->Destroy();
 
+		world->DeInitialize();
+		delete world;
+		
 		std::cout << "[Engine] deinitialized\n";
 	}
 

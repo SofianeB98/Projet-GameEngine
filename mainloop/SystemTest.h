@@ -7,7 +7,7 @@ namespace ECS
 {
 	class SystemTest : public SystemBase
 	{
-		virtual void Update(double dt) final
+		virtual void Update(float dt) final
 		{
 			/*JobSystem::Execute(
 				[]() {

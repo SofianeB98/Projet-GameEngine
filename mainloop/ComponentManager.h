@@ -2,7 +2,6 @@
 #include <memory>
 #include <unordered_map>
 
-
 #include "fnv.h"
 #include "IComponentArray.h"
 
@@ -26,6 +25,23 @@ namespace ECS
 		}
 
 	public:
+		void Initialize()
+		{
+			/*component_types.reserve(MAX_COMPONENTS);
+			component_arrays.reserve(MAX_COMPONENTS);*/
+		}
+		
+		void DeInitialize()
+		{
+			//Clear all map
+			for (auto& p : component_arrays)
+			{
+				p.second.reset();
+			}
+
+			component_types.clear();
+		}
+		
 		template <typename T>
 		void RegisterComponent()
 		{
@@ -82,6 +98,12 @@ namespace ECS
 		void EntityDestroyed(Entity e)
 		{
 			//Invoquer un event
+			for (auto const& pair : this->component_arrays)
+			{
+				auto const& component = pair.second;
+
+				component->EntityDestroyed(e);
+			}
 		}
 	};
 }

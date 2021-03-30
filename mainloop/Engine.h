@@ -1,6 +1,7 @@
 #pragma once
 
 #include "InfraStructure.h"
+#include "World.h"
 
 namespace ESGI
 {
@@ -8,7 +9,8 @@ namespace ESGI
 	// qui ne sont pas encore definies (fonctionne ici car il s'agit de pointeurs,
 	// seul le typage interesse le compilateur dans ce cas)	
 	struct EngineContext;
-
+	
+	
 	struct Engine : public InfraStructure
 	{
 		// Un exemple basique de sous-systeme du moteur (par ex. le moteur Behaviour)
@@ -25,10 +27,10 @@ namespace ESGI
 			void Update(float deltaTime) {}
 			void FixedUpdate(float deltaTime) {}
 		};
-
+		
 		// simple exemple, ou alors un vector ou une liste simplement chainee (intrusive) de systems
 		EngineSystem* m_AIEngine;
-
+		ECS::World* world;
 
 		void ProcessSystems(double elapsedTime);
 

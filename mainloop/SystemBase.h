@@ -11,7 +11,7 @@ namespace ECS {
 		virtual void OnCreate() {};
 		virtual void OnDestroy() {};
 		// Update Loop
-		virtual void Update(double dt) = 0;
+		virtual void Update(float dt) = 0;
 	};
 }
 

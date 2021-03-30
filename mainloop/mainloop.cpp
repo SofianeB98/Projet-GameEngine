@@ -194,14 +194,13 @@ namespace ESGI
 int main(void)
 {
 	ECS::World w;
-	w.Init();
+	w.Initialize();
 
 	w.RegisterComponent<ECS::ComponentBase>();
 	w.RegisterComponent<ECS::Transform>();
 	
 	std::shared_ptr<ECS::SystemTest> aaa =  w.RegisterSystem<ECS::SystemTest>(ECS::ComponentBase(), ECS::Transform());
 
-	
 	
 	using namespace ESGI;
 	

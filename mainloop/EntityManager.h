@@ -34,6 +34,12 @@ namespace ECS
 		void DestroyEntity(Entity e);
 		void SetUniqueKey(Entity e, UniqueKey k);
 		UniqueKey GetUniqueKey(Entity e);
+
+		void DeInitialize()
+		{
+			//Clear all map
+			
+		}
 	};
 
 }

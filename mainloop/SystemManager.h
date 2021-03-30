@@ -63,5 +63,25 @@ namespace ECS {
 				}
 			}
 		}
+
+		void UpdateSystem(float dt) const
+		{
+			for (auto const& sys : systems)
+			{
+				sys.second->Update(dt);
+			}
+		}
+
+		void DeInitialize()
+		{
+			//Clear all map
+			for (auto& p : systems)
+			{
+				p.second.reset();
+			}
+
+			keys.clear();
+			
+		}
 	};
 }
