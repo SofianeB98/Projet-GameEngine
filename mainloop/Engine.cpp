@@ -63,7 +63,7 @@ namespace ESGI {
 	// ce n'est pas une fonction virtuelle !
 	void Engine::Update(EngineContext& context)
 	{
-		std::cout << "[Engine] update\n";
+		//std::cout << "[Engine] update\n";
 
 		double elapsedTime = context.clock.ElapsedTime;
 

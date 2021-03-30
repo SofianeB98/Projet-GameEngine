@@ -83,13 +83,13 @@
     <ClInclude Include="World.h">
       <Filter>Fichiers sources\ECS</Filter>
     </ClInclude>
-    <ClInclude Include="SystemBase.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="ComponentBase.h">
       <Filter>Fichiers sources\ECS</Filter>
     </ClInclude>
     <ClInclude Include="SystemTest.h">
+      <Filter>Fichiers sources\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="SystemBase.h">
       <Filter>Fichiers sources\ECS</Filter>
     </ClInclude>
   </ItemGroup>

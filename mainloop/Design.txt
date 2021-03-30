@@ -5,17 +5,15 @@
 NOTE : Ne pas oublier qu'on a les fonctions "algorithm" de la STL pour tout ce qui est recherches, remplissage, action, ...
 
 --> ECS
-	--> Entity --(POOL)
-	--> Composants (= classe mere) --(POOL)
+	--> Composants (= classe mere)
 		--> ComposantsHéritier (Transform, ...)
 
 	--> systemes (= classe mere)
 		--> SystemesHeriteir (ShootSystem, TranslateSystem, ...)
+	--> Creer la key comme unity
 
 	--> World => Contient tout ce qui est perform dednas (&Entity, &Composants, &Systemes Agissant sur le world)
-		--> Pool Entity
-		--> Pool Composants
-		--> Array de systemes
+
 
 --> Pooling (Essayer de faire un truc générique réutilisable)
 	(--> Pool Entity)
@@ -27,11 +25,7 @@ NOTE : Ne pas oublier qu'on a les fonctions "algorithm" de la STL pour tout ce q
 	--> (= une string comme sur unity ?)
 	--> (= une enum ?)
 
---> Hachage string
-	--> CF https://create.stephan-brumme.com/fnv-hash/
-	--> Permet d'optimiser les string en gros
-	--> Les comparer plus facilement etc
-	--> Après faut comprendre comment utiliser
+
 
 --> Réfléchir au différents Composants
 	--> Comp

@@ -10,15 +10,22 @@
 
 namespace ECS {
 
-	class SystemManager {
+	class SystemManager
+	{
+		std::unordered_map<uint32_t, UniqueKey> keys{};
+		std::unordered_map <uint32_t, std::shared_ptr<SystemBase>> systems{};
+		
 	public:
 		template<typename T>
 		std::shared_ptr<T> RegisterSystem() {
 			//const char* typeName = typeid(T).name();
 			uint32_t typeName = FNV::fnv1a(typeid(T).name());
+			
 			assert(systems.find(typeName) == systems.end(), "System " << typeid(T).name() << " already registered");
+			
 			auto system = std::make_shared<T>();
 			systems.insert({ typeName, system });
+			
 			return system;
 		}
 
@@ -30,20 +37,6 @@ namespace ECS {
 			keys.insert({ typeName, key });
 		}
 
-		void SetUniqueKey()
-		{
-			// RIEN
-			//std::cout << "UNIQUE KEY END " << std::endl;
-		}
-		
-		template<typename T, typename... C>
-		void SetUniqueKey(T value, C... c)
-		{
-			//std::cout << "Je passe ici !" << typeid(value).name() << std::endl;
-			
-			SetUniqueKey(c...);
-		}
-		
 		void EntityDestroyed(Entity entity) {
 			for (auto const& pair : systems) {
 				auto const& system = pair.second;
@@ -70,9 +63,5 @@ namespace ECS {
 				}
 			}
 		}
-
-	private:
-		std::unordered_map<uint32_t, UniqueKey> keys;
-		std::unordered_map <uint32_t, std::shared_ptr<SystemBase>> systems;
 	};
 }

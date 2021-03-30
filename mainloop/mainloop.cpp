@@ -170,7 +170,7 @@ namespace ESGI
 
 			while (!m_needToQuit)
 			{
-				std::cout << "[Application] frame # " << m_frameIndex << std::endl;
+				//std::cout << "[Application] frame # " << m_frameIndex << std::endl;
 				
 				Update();
 				
@@ -193,14 +193,13 @@ namespace ESGI
 
 int main(void)
 {
-	//ECS::SystemManager a;
-
-	//a.SetUniqueKey(ECS::ComponentBase(), ECS::Transform(), ECS::Transform(), ECS::Transform());
-
 	ECS::World w;
 	w.Init();
 
-	w.RegisterSystem<Tests::SystemTest>(ECS::ComponentBase(), ECS::Transform());
+	w.RegisterComponent<ECS::ComponentBase>();
+	w.RegisterComponent<ECS::Transform>();
+	
+	std::shared_ptr<ECS::SystemTest> aaa =  w.RegisterSystem<ECS::SystemTest>(ECS::ComponentBase(), ECS::Transform());
 
 	
 	

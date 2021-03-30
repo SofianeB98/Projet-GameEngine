@@ -26,7 +26,7 @@ namespace ESGI {
 	void Input::Update()
 	{
 		QuitButtonPressed = GetQuitButtonState();
-		std::cout << "[Input] update\n";
+		//std::cout << "[Input] update\n";
 	}
 
 	bool Input::GetQuitButtonState()

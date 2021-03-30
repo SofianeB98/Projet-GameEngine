@@ -53,6 +53,6 @@ namespace ESGI {
 			i++;
 		}
 
-		std::cout << "[Timer] update\n";
+		//std::cout << "[Timer] update\n";
 	}
 }

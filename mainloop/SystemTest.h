@@ -1,19 +1,19 @@
 #pragma once
-#include "EcsBase.h"
+//#include "EcsBase.h"
 #include "SystemBase.h"
-#include "JobSystem.h";
-#include <iostream>
-namespace Tests
+//#include "JobSystem.h";
+//#include <iostream>
+namespace ECS
 {
-	class SystemTest : ECS::SystemBase
+	class SystemTest : public SystemBase
 	{
-		virtual void Update()
+		virtual void Update(double dt) final
 		{
-			JobSystem::Execute(
+			/*JobSystem::Execute(
 				[]() {
 					std::cout << "System " << typeid(SystemTest).name() << " Executed";
 				}
-			);
+			);*/
 		}
 	};
 }
