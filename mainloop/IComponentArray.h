@@ -2,6 +2,8 @@
 #include <cassert>
 #include <unordered_map>
 
+
+#include "ComponentBase.h"
 #include "EcsBase.h"
 
 namespace ECS
@@ -14,14 +16,14 @@ namespace ECS
 		virtual void EntityDestroyed(Entity e) = 0;
 	};
 
-	template <typename T>
+	template <typename T = ComponentBase>
 	class ComponentArray : public IComponentArray
 	{
-		std::array<T, MAX_ENTITIES> component_array;
+		std::array<T, MAX_ENTITIES + 1> component_array;
 		std::unordered_map<Entity, size_t> entity_to_indexMap;
 		std::unordered_map<size_t, Entity> index_to_entityMap;
 
-		size_t size;
+		size_t size = 1;
 		
 	public:
 		void InsertData(Entity e, T component)
@@ -29,6 +31,7 @@ namespace ECS
 			assert(this->entity_to_indexMap.find(e) == this->entity_to_indexMap.end(), "Component deja ajoute");
 
 			//assert(this->size < MAX_ENTITIES);
+			component.isNullComponent = false;
 			
 			size_t idx = this->size;
 			this->entity_to_indexMap[e] = idx;
@@ -48,6 +51,7 @@ namespace ECS
 			size_t last_element_index = this->size - 1;
 			// je remplace le component de m'enity removed par celui du last idx
 			this->component_array[removed_entity_idx] = this->component_array[last_element_index];
+			//this->component_array[last_element_index] = this->component_array[0];
 
 			// je recupere l'entity du last element
 			Entity entity_of_last_element = this->index_to_entityMap[last_element_index];
@@ -66,7 +70,10 @@ namespace ECS
 
 		T& GetData(Entity e)
 		{
-			assert(this->entity_to_indexMap.find(e) != this->entity_to_indexMap.end(), "Cette entity n'a pas ce component");
+			//assert(this->entity_to_indexMap.find(e) != this->entity_to_indexMap.end(), "Cette entity n'a pas ce component");
+			if (this->entity_to_indexMap.find(e) == this->entity_to_indexMap.end())
+				return this->component_array[0];
+			
 			return this->component_array[this->entity_to_indexMap[e]];
 		}
 
@@ -75,7 +82,5 @@ namespace ECS
 			if (this->entity_to_indexMap.find(e) != this->entity_to_indexMap.end())
 				RemoveData(e);
 		}
-		
 	};
-	
 }

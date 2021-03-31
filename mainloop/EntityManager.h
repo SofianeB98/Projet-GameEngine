@@ -15,7 +15,7 @@ namespace ECS
 		// Stock toutes les entity valide
 		std::queue<Entity> available_entities;
 		// Stock les unique key des entity
-		std::array<UniqueKey, MAX_ENTITIES> entities_unique_key;
+		std::array<UniqueKey, MAX_ENTITIES + 1> entities_unique_key;
 		// nombre d'entity actuellement en vie
 		uint32_t current_living_entites;
 		
@@ -25,7 +25,7 @@ namespace ECS
 			this->current_living_entites = 0;
 			
 			// On initialise le tableau d'entity
-			for (Entity e = 0; e < MAX_ENTITIES; ++e)
+			for (Entity e = 1; e < MAX_ENTITIES + 1; ++e)
 				this->available_entities.push(e);
 		}
 

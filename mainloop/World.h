@@ -101,13 +101,13 @@ namespace ECS
 			return this->component_manager->GetComponentType<T>();
 		}
 
-		template <typename T>
+		template <typename T = ComponentBase>
 		bool HasComponent(Entity e) const
 		{
-			return true;
+			return !GetComponent<T>(e).isNullComponent;
 		}
 
-		template <typename T>
+		template <typename T = ComponentBase>
 		void FindObjectsWith() const
 		{
 			//do some stuff

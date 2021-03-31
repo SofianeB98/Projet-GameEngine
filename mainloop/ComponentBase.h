@@ -1,11 +1,11 @@
-﻿#pragma once
+#pragma once
 
 namespace ECS
 {
 
 	struct ComponentBase
 	{
-		
+		bool isNullComponent = true;
 	};
 	
 	struct TranslationComponent : ComponentBase

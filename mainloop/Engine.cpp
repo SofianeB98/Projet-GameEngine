@@ -60,6 +60,8 @@ namespace ESGI {
 		ECS::Entity e = world->CreateEntity();
 		world->AddComponent<ECS::TranslationComponent>(e, {});
 
+		if (!world->HasComponent<ECS::TranslationComponent>(e))
+			std::cout << "Merde il a pas de rot" << std::endl;
 		
 		std::cout << "[Engine] initialized\n";
 
