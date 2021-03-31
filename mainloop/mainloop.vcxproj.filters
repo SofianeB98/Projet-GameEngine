@@ -19,6 +19,9 @@
     <Filter Include="Fichiers sources\Utils">
       <UniqueIdentifier>{135af03a-7315-47f3-8ffd-efcf9bbf4d4a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers sources\bgfx">
+      <UniqueIdentifier>{bf6f9cc7-566d-4d96-bc80-d83a36b98af3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Timer.cpp">
@@ -100,6 +103,18 @@
     </ClInclude>
     <ClInclude Include="smath.h">
       <Filter>Fichiers sources\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="bgfx.h">
+      <Filter>Fichiers sources\bgfx</Filter>
+    </ClInclude>
+    <ClInclude Include="defines.h">
+      <Filter>Fichiers sources\bgfx</Filter>
+    </ClInclude>
+    <ClInclude Include="embedded_shader.h">
+      <Filter>Fichiers sources\bgfx</Filter>
+    </ClInclude>
+    <ClInclude Include="platform.h">
+      <Filter>Fichiers sources\bgfx</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
