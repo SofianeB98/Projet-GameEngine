@@ -1,5 +1,7 @@
 #pragma once
 #include<set>
+
+#include "ComponentBase.h"
 #include "EcsBase.h"
 #include "JobSystem.h"
 
@@ -19,7 +21,7 @@ namespace ECS {
 
 	class SystemTest : public SystemBase
 	{	
-		virtual void Update(float dt, World& world) final;
+		virtual void Update(float dt, const World& world) final;
 	};
 }
 

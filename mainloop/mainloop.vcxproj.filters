@@ -98,6 +98,9 @@
     <ClInclude Include="JobSystem.h">
       <Filter>Fichiers sources\ECS</Filter>
     </ClInclude>
+    <ClInclude Include="smath.h">
+      <Filter>Fichiers sources\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Design.txt" />

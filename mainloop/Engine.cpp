@@ -13,14 +13,14 @@ namespace ESGI {
 	{
 		EngineSystem& system = *m_AIEngine;
 		ECS::World& w = *world;
-		
+
 		system.accumulatedTime += elapsedTime;
 
 		float deltaTime = static_cast<float>(elapsedTime);
 
 		system.Update(deltaTime);
 		w.Update(deltaTime);
-		
+
 		int loops = system.maxIterations;
 		// on sort de la boucle des que l'un des deux tests est faux
 		while ((system.accumulatedTime > system.targetFrameRate) && (loops > 0))
@@ -32,7 +32,7 @@ namespace ESGI {
 
 			system.FixedUpdate(static_cast<float>(system.targetFrameRate));
 
-			--loops;			
+			--loops;
 		}
 	}
 
@@ -51,18 +51,21 @@ namespace ESGI {
 
 		world = new ECS::World;
 		world->Initialize();
-		
+
 		world->RegisterComponent<ECS::TranslationComponent>();
 		world->RegisterComponent<ECS::RotationComponent>();
-		
-		auto sys = world->RegisterSystem<ECS::SystemTest>(ECS::RotationComponent());
-		
-		ECS::Entity e = world->CreateEntity();
-		world->AddComponent<ECS::TranslationComponent>(e, {});
 
 		if (!world->HasComponent<ECS::TranslationComponent>(e))
 			std::cout << "Merde il a pas de rot" << std::endl;
 		
+		auto sys = world->RegisterSystem<ECS::SystemTest>(ECS::TranslationComponent());
+		for (int i = 0; i < 100; i++)
+		{
+			ECS::Entity e = world->CreateEntity();
+			world->AddComponent<ECS::TranslationComponent>(e, {});
+		}
+
+
 		std::cout << "[Engine] initialized\n";
 
 		return true;
@@ -76,7 +79,7 @@ namespace ESGI {
 
 		world->DeInitialize();
 		delete world;
-		
+
 		std::cout << "[Engine] deinitialized\n";
 	}
 

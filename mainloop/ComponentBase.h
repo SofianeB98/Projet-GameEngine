@@ -1,5 +1,5 @@
-#pragma once
-
+﻿#pragma once
+#include "smath.h"
 namespace ECS
 {
 
@@ -10,7 +10,7 @@ namespace ECS
 	
 	struct TranslationComponent : ComponentBase
 	{
-		float a;
+		float4 value;
 	};
 
 	struct RotationComponent : ComponentBase
