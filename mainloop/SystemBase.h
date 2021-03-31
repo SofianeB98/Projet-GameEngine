@@ -1,6 +1,8 @@
 #pragma once
 #include<set>
 #include "EcsBase.h"
+#include "JobSystem.h"
+
 namespace ECS {
 	class World;
 
@@ -17,14 +19,7 @@ namespace ECS {
 
 	class SystemTest : public SystemBase
 	{	
-		virtual void Update(float dt, const World& world) final
-		{
-			/*JobSystem::Execute(
-				[]() {
-					std::cout << "System " << typeid(SystemTest).name() << " Executed";
-				}
-			);*/
-		}
+		virtual void Update(float dt, World& world) final;
 	};
 }
 

@@ -42,6 +42,9 @@
     <ClCompile Include="JobSystem.cpp">
       <Filter>Fichiers sources\ECS</Filter>
     </ClCompile>
+    <ClCompile Include="SystemBase.cpp">
+      <Filter>Fichiers sources\ECS</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Utils.h">
