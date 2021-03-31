@@ -8,12 +8,14 @@ namespace ESGI {
 		struct Clock& clock;
 		struct Input& input;
 		struct Engine& engine;
+		struct Renderer& renderer;
 
-		EngineContext(Clock& c, Input& i, Engine& e) : clock(c), input(i), engine(e) {}
+		EngineContext(Clock& c, Input& i, Engine& e, Renderer& r) : clock(c), input(i), engine(e), renderer(r) {}
 		~EngineContext() { /*mettez un breakpoint histoire de s'assurer que l'objet est bien detruit*/ }
 
 		Clock& Clock() const;
 		Input& Input() const;
 		Engine& Engine() const;
+		Renderer& Renderer() const;
 	};
 }

@@ -4,8 +4,7 @@
 #include <unordered_map>
 #include "EcsBase.h"
 #include "SystemBase.h"
-#include <assert.h>
-#include "ComponentBase.h"
+#include <cassert>
 #include "fnv.h"
 
 namespace ECS {
@@ -71,7 +70,7 @@ namespace ECS {
 				sys.second->Update(dt, world);
 			}
 		}
-
+		
 		void DeInitialize()
 		{
 			//Clear all map

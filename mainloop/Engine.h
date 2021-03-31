@@ -14,23 +14,43 @@ namespace ESGI
 	struct Engine : public InfraStructure
 	{
 		// Un exemple basique de sous-systeme du moteur (par ex. le moteur Behaviour)
-		struct EngineSystem
+		struct EngineSubSystem
 		{
+			ECS::World* world;
+
 			double targetFrameRate = 1.0 / 60.0;
 			double accumulatedTime = 0.0;
 			int maxIterations = 2;
 
 			bool Create() { return true; }
 			void Destroy() {}
-			bool Initialize() { return true; }
-			void DeInitialize() {}
-			void Update(float deltaTime) {}
-			void FixedUpdate(float deltaTime) {}
+			bool Initialize()
+			{
+				world = new ECS::World;
+				world->Initialize();
+
+				return true;
+			}
+			
+			void DeInitialize()
+			{
+				world->DeInitialize();
+				delete world;
+			}
+			
+			void Update(float deltaTime)
+			{
+				world->Update(deltaTime);
+			}
+			
+			void FixedUpdate(float deltaTime)
+			{
+				
+			}
 		};
 		
 		// simple exemple, ou alors un vector ou une liste simplement chainee (intrusive) de systems
-		EngineSystem* m_AIEngine;
-		ECS::World* world;
+		EngineSubSystem* m_AIEngine;
 
 		void ProcessSystems(double elapsedTime);
 

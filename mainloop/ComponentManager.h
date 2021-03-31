@@ -27,8 +27,10 @@ namespace ECS
 	public:
 		void Initialize()
 		{
-			/*component_types.reserve(MAX_COMPONENTS);
-			component_arrays.reserve(MAX_COMPONENTS);*/
+			// On register tout les components de base
+			this->RegisterComponent<ECS::TranslationComponent>();
+			this->RegisterComponent<ECS::RotationComponent>();
+			this->RegisterComponent<ECS::RendererComponent>();
 		}
 		
 		void DeInitialize()

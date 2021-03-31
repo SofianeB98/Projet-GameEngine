@@ -11,13 +11,16 @@
 #include "Timer.h"
 #include "Input.h"
 #include "Engine.h"
+#include "Renderer.h"
 #include "EngineContext.h"
+
 
 #include <iostream>
 #include <vector>
 #include <thread>
 #include "JobSystem.h"
-#include <bgfx.h>
+
+
 namespace ESGI
 {
 	//
@@ -42,6 +45,9 @@ namespace ESGI
 	Clock& EngineContext::Clock() const { return clock; }
 	Input& EngineContext::Input() const { return input; }
 	Engine& EngineContext::Engine() const { return engine; }
+	Renderer& EngineContext::Renderer() const { return renderer; }
+	// Renderer& EngineContext::Engine() const { return renderer; }
+	
 	// une map ou une recherche par identifiant dans un vector serait sans doute plus elegant et generique
 
 	//
@@ -84,8 +90,9 @@ namespace ESGI
 			Clock* clock = new ESGI::Clock;
 			Input* input = new ESGI::Input;
 			Engine* engine = new ESGI::Engine;
+			Renderer* renderer = new ESGI::Renderer;
 
-			static EngineContext context(*clock, *input, *engine);
+			static EngineContext context(*clock, *input, *engine, *renderer);
 			return context;
 		}
 
@@ -99,6 +106,7 @@ namespace ESGI
 			m_cores.emplace_back(&m_context.clock);
 			m_cores.emplace_back(&m_context.input);
 			m_cores.emplace_back(&m_context.engine);
+			m_cores.emplace_back(&m_context.renderer);
 
 			return true;
 		}
@@ -125,7 +133,10 @@ namespace ESGI
 			for (auto * core : m_cores) {
 				allOk &= core->Initialize();
 			}
-
+			Engine& eng = m_context.Engine();
+			auto ent = eng.m_AIEngine->world->CreateEntity();
+			eng.m_AIEngine->world->AddComponent<ECS::RendererComponent>(ent, {Renderer().cubeVAO, Renderer().cubeVBO, Renderer().defaultShaderProgram});
+			
 			// exemple de scheduling de deux fonctions (non membre, plus simple a faire)
 			// todo: event/delegate facon c# acceptant tout type de fonction.
 
@@ -148,12 +159,17 @@ namespace ESGI
 		void Update()
 		{
 			// Ici le role et l'ordre de chaque classe est bien defini 
+			m_context.Renderer().PreUpdate();
 
 			m_context.Clock().Update();
 			
 			m_context.Input().Update();
 			
 			m_context.Engine().Update(m_context);
+
+			m_context.Renderer().Update();
+			
+			m_context.Renderer().PostUpdate();
 		}
 
 		// main loop
@@ -166,10 +182,10 @@ namespace ESGI
 			}
 
 			m_needToQuit = !initOk;
-
-			while (!m_needToQuit)
+			
+			while (!m_needToQuit && !m_context.Renderer().WindowShouldClose())
 			{
-				//std::cout << "[Application] frame # " << m_frameIndex << std::endl;
+				std::cout << "[Application] frame # " << m_frameIndex << std::endl;
 				
 				Update();
 				
@@ -187,6 +203,8 @@ namespace ESGI
 		}
 	};
 }
+
+#include <Windows.h>
 
 int main(void)
 {

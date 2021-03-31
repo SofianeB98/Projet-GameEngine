@@ -1,6 +1,8 @@
 #pragma once
 #include <nmmintrin.h>
 #include <immintrin.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 union float4
 {

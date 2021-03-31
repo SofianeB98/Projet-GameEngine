@@ -1,9 +1,8 @@
 #pragma once
 #include<set>
 
-#include "ComponentBase.h"
 #include "EcsBase.h"
-#include "JobSystem.h"
+
 
 namespace ECS {
 	class World;
@@ -21,6 +20,11 @@ namespace ECS {
 
 	class SystemTest : public SystemBase
 	{	
+		virtual void Update(float dt, const World& world) final;
+	};
+
+	class RendererSystem : public SystemBase
+	{
 		virtual void Update(float dt, const World& world) final;
 	};
 }

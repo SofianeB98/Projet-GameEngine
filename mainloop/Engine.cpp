@@ -11,15 +11,13 @@ namespace ESGI {
 
 	void Engine::ProcessSystems(double elapsedTime)
 	{
-		EngineSystem& system = *m_AIEngine;
-		ECS::World& w = *world;
+		EngineSubSystem& system = *m_AIEngine;
 
 		system.accumulatedTime += elapsedTime;
 
 		float deltaTime = static_cast<float>(elapsedTime);
 
 		system.Update(deltaTime);
-		w.Update(deltaTime);
 
 		int loops = system.maxIterations;
 		// on sort de la boucle des que l'un des deux tests est faux
@@ -43,28 +41,11 @@ namespace ESGI {
 #endif
 
 		// Les systemes pourraient etre cree de facon data-driven, plugins, ou en dur
-		EngineSystem* system = new EngineSystem;
+		EngineSubSystem* system = new EngineSubSystem;
 		system->Create();
 		system->Initialize();
 
 		m_AIEngine = system;
-
-		world = new ECS::World;
-		world->Initialize();
-
-		world->RegisterComponent<ECS::TranslationComponent>();
-		world->RegisterComponent<ECS::RotationComponent>();
-
-		if (!world->HasComponent<ECS::TranslationComponent>(e))
-			std::cout << "Merde il a pas de rot" << std::endl;
-		
-		auto sys = world->RegisterSystem<ECS::SystemTest>(ECS::TranslationComponent());
-		for (int i = 0; i < 100; i++)
-		{
-			ECS::Entity e = world->CreateEntity();
-			world->AddComponent<ECS::TranslationComponent>(e, {});
-		}
-
 
 		std::cout << "[Engine] initialized\n";
 
@@ -76,9 +57,6 @@ namespace ESGI {
 		// libere et detruit les systems
 		m_AIEngine->DeInitialize();
 		m_AIEngine->Destroy();
-
-		world->DeInitialize();
-		delete world;
 
 		std::cout << "[Engine] deinitialized\n";
 	}

@@ -19,8 +19,11 @@
     <Filter Include="Fichiers sources\Utils">
       <UniqueIdentifier>{135af03a-7315-47f3-8ffd-efcf9bbf4d4a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fichiers sources\bgfx">
-      <UniqueIdentifier>{bf6f9cc7-566d-4d96-bc80-d83a36b98af3}</UniqueIdentifier>
+    <Filter Include="Fichiers sources\OpenGL">
+      <UniqueIdentifier>{573a4205-38d9-46ac-a21c-564838bb4b2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\OpenGL\Shader">
+      <UniqueIdentifier>{b280c322-936a-4feb-9d81-d3b7700f6158}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -36,9 +39,6 @@
     <ClCompile Include="Engine.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="GenericPool.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="EntityManager.cpp">
       <Filter>Fichiers sources\ECS</Filter>
     </ClCompile>
@@ -47,6 +47,15 @@
     </ClCompile>
     <ClCompile Include="SystemBase.cpp">
       <Filter>Fichiers sources\ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\GLShader.cpp">
+      <Filter>Fichiers sources\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Fichiers sources\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -66,9 +75,6 @@
       <Filter>Fichiers sources</Filter>
     </ClInclude>
     <ClInclude Include="Engine.h">
-      <Filter>Fichiers sources</Filter>
-    </ClInclude>
-    <ClInclude Include="GenericPool.h">
       <Filter>Fichiers sources</Filter>
     </ClInclude>
     <ClInclude Include="EcsBase.h">
@@ -104,20 +110,28 @@
     <ClInclude Include="smath.h">
       <Filter>Fichiers sources\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="bgfx.h">
-      <Filter>Fichiers sources\bgfx</Filter>
+    <ClInclude Include="..\common\GLShader.h">
+      <Filter>Fichiers sources\OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="defines.h">
-      <Filter>Fichiers sources\bgfx</Filter>
+    <ClInclude Include="stdafx.h">
+      <Filter>Fichiers sources\OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="embedded_shader.h">
-      <Filter>Fichiers sources\bgfx</Filter>
+    <ClInclude Include="targetver.h">
+      <Filter>Fichiers sources\OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="platform.h">
-      <Filter>Fichiers sources\bgfx</Filter>
+    <ClInclude Include="Renderer.h">
+      <Filter>Fichiers sources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Design.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="defaultShader.fs.glsl">
+      <Filter>Fichiers sources\OpenGL\Shader</Filter>
+    </None>
+    <None Include="defaultShader.vs.glsl">
+      <Filter>Fichiers sources\OpenGL\Shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

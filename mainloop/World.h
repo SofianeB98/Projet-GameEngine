@@ -19,10 +19,13 @@ namespace ECS
 			this->entity_manager = std::make_unique<EntityManager>();
 			this->component_manager = std::make_unique<ComponentManager>();
 			this->system_manager = std::make_unique<SystemManager>();
-			
-			//this->entity_manager->Initialize();
+
+			// Le component manager va register tout les component deja connu
 			this->component_manager->Initialize();
-			//this->system_manager->Initialize();
+
+			// Ensuite on va register tout les System connu
+			//this->RegisterSystem<ECS::SystemTest>(ECS::TranslationComponent(), ECS::RotationComponent());
+			this->RegisterSystem<ECS::RendererSystem>(ECS::RendererComponent());
 		}
 
 		void Update(float deltaTime)
@@ -112,7 +115,7 @@ namespace ECS
 		{
 			//do some stuff
 			std::vector<Entity> entitiesWithT;
-			entitiesWithT.reserve(MAX_ENTITIES);
+			entitiesWithT.reserve(MAX_ENTITIES + 1);
 
 			auto used_entities = this->entity_manager->GetUsedEntities();
 

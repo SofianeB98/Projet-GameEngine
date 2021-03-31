@@ -99,6 +99,19 @@ On a :
 
 
 
+====== RENDERER ======
+
+Infrastructure Renderer 
+	==> Initialise le context (window, les VertexBuffer des mesh necessaires, shader, ...)
+		==> Tout est stocké pour pouvoir y accéder à l'initialisation
+	==> Detruit le context a la fin
+
+RendererComponent
+	==> Stock ce qu'il faut pour rendre un objet
+		==> Mesh, Shader, ...
+
+RendererSystem
+	==> Fait le rendue de tout ce qui est renderable
 
 ====== QUESTION ======
 
