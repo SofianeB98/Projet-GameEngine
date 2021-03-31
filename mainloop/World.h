@@ -44,12 +44,12 @@ namespace ECS
 		}
 		
 #pragma region Entity
-		Entity CreateEntity()
+		Entity CreateEntity() const
 		{
 			return this->entity_manager->CreateEntity();
 		}
 
-		void DestroyEntity(Entity e)
+		void DestroyEntity(Entity e) const
 		{
 			this->entity_manager->DestroyEntity(e);
 			this->component_manager->EntityDestroyed(e);
@@ -66,7 +66,7 @@ namespace ECS
 		}
 
 		template <typename T>
-		void AddComponent(Entity e, T c)
+		void AddComponent(Entity e, T c) const
 		{
 			this->component_manager->AddComponent<T>(e, c);
 
@@ -78,7 +78,7 @@ namespace ECS
 		}
 
 		template <typename T>
-		void RemoveComponent(Entity e)
+		void RemoveComponent(Entity e) const
 		{
 			this->component_manager->RemoveComponent<T>(e);
 
@@ -90,7 +90,7 @@ namespace ECS
 		}
 
 		template <typename T>
-		T& GetComponent(Entity e)
+		T& GetComponent(Entity e) const
 		{
 			return component_manager->GetComponent<T>(e);
 		}
@@ -102,13 +102,13 @@ namespace ECS
 		}
 
 		template <typename T>
-		bool HasComponent(Entity e)
+		bool HasComponent(Entity e) const
 		{
 			return true;
 		}
 
 		template <typename T>
-		void FindObjectsWith()
+		void FindObjectsWith() const
 		{
 			//do some stuff
 		}
@@ -116,6 +116,13 @@ namespace ECS
 
 		
 #pragma region System
+	private:
+		template <typename T>
+		void SetSystemUniqueKey(UniqueKey k)
+		{
+			this->system_manager->SetUniqueKey<T>(k);
+		}
+
 		UniqueKey SetUniqueKey(UniqueKey& k)
 		{
 			// RIEN
@@ -133,6 +140,8 @@ namespace ECS
 			return SetUniqueKey(k, c...);
 		}
 		
+		
+	public:
 		template <typename T, typename U, typename ...C>
 		std::shared_ptr<T> RegisterSystem(U value, C ...c)
 		{
@@ -149,11 +158,6 @@ namespace ECS
 		}
 
 		
-		template <typename T>
-		void SetSystemUniqueKey(UniqueKey k)
-		{
-			this->system_manager->SetUniqueKey<T>(k);
-		}
 #pragma endregion 
 		
 	};
