@@ -108,9 +108,25 @@ namespace ECS
 		}
 
 		template <typename T = ComponentBase>
-		void FindObjectsWith() const
+		std::vector<Entity> FindEntitiesWith() const
 		{
 			//do some stuff
+			std::vector<Entity> entitiesWithT;
+			entitiesWithT.reserve(MAX_ENTITIES);
+
+			auto used_entities = this->entity_manager->GetUsedEntities();
+
+			for (auto it = used_entities.begin(); it != used_entities.end(); ++it)
+			{
+				if(*it == NULL_ENTITY)
+					continue;
+
+				if (HasComponent<T>(*it))
+					entitiesWithT.push_back(*it);
+			}
+
+			
+			return entitiesWithT;
 		}
 #pragma endregion
 
