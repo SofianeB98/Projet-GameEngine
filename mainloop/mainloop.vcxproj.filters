@@ -39,6 +39,9 @@
     <ClCompile Include="EntityManager.cpp">
       <Filter>Fichiers sources\ECS</Filter>
     </ClCompile>
+    <ClCompile Include="JobSystem.cpp">
+      <Filter>Fichiers sources\ECS</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Utils.h">
@@ -86,10 +89,10 @@
     <ClInclude Include="ComponentBase.h">
       <Filter>Fichiers sources\ECS</Filter>
     </ClInclude>
-    <ClInclude Include="SystemTest.h">
+    <ClInclude Include="SystemBase.h">
       <Filter>Fichiers sources\ECS</Filter>
     </ClInclude>
-    <ClInclude Include="SystemBase.h">
+    <ClInclude Include="JobSystem.h">
       <Filter>Fichiers sources\ECS</Filter>
     </ClInclude>
   </ItemGroup>

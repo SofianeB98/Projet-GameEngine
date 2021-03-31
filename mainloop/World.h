@@ -12,14 +12,14 @@ namespace ECS
 		std::unique_ptr<EntityManager> entity_manager;
 		std::unique_ptr<ComponentManager> component_manager;
 		std::unique_ptr<SystemManager> system_manager;
-
+		
 	public:
 		void Initialize()
 		{
 			this->entity_manager = std::make_unique<EntityManager>();
 			this->component_manager = std::make_unique<ComponentManager>();
 			this->system_manager = std::make_unique<SystemManager>();
-
+			
 			//this->entity_manager->Initialize();
 			this->component_manager->Initialize();
 			//this->system_manager->Initialize();
@@ -27,7 +27,7 @@ namespace ECS
 
 		void Update(float deltaTime)
 		{
-			system_manager->UpdateSystem(deltaTime);
+			system_manager->UpdateSystem(deltaTime, *this);
 		}
 		
 		void DeInitialize()
@@ -104,8 +104,6 @@ namespace ECS
 		template <typename T>
 		bool HasComponent(Entity e)
 		{
-			//do some stuff
-			
 			return true;
 		}
 
@@ -139,7 +137,7 @@ namespace ECS
 		std::shared_ptr<T> RegisterSystem(U value, C ...c)
 		{
 			auto sys = this->system_manager->RegisterSystem<T>();
-
+			
 			std::cout << "Je commence a cree la key du system " << typeid(T).name() << std::endl;
 			UniqueKey key;
 			key = SetUniqueKey(key, value, c...);

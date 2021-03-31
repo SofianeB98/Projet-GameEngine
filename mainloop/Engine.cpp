@@ -6,6 +6,7 @@
 
 #include <iostream>
 
+
 namespace ESGI {
 
 	void Engine::ProcessSystems(double elapsedTime)
@@ -48,11 +49,22 @@ namespace ESGI {
 
 		m_AIEngine = system;
 
-		ECS::World* w = new ECS::World;
-		w->Initialize();
-		world = w;
+		world = new ECS::World;
+		world->Initialize();
+		
 
+		//world->RegisterComponent<ECS::ComponentBase>();
+		world->RegisterComponent<ECS::TranslationComponent>();
+		world->RegisterComponent<ECS::RotationComponent>();
+		
+		auto sys = world->RegisterSystem<ECS::SystemTest>(ECS::RotationComponent());
+		
+		ECS::Entity e = world->CreateEntity();
+		//world->AddComponent<ECS::ComponentBase>(e, {});
+		world->AddComponent<ECS::TranslationComponent>(e, {});
 
+		ECS::RotationComponent& cmp = world->GetComponent<ECS::RotationComponent>(e);
+		
 		
 		std::cout << "[Engine] initialized\n";
 

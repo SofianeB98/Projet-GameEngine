@@ -17,8 +17,6 @@
 #include <vector>
 #include <thread>
 #include "JobSystem.h"
-#include "SystemTest.h"
-
 namespace ESGI
 {
 	//
@@ -189,19 +187,8 @@ namespace ESGI
 	};
 }
 
-#include "World.h"
-
 int main(void)
 {
-	ECS::World w;
-	w.Initialize();
-
-	w.RegisterComponent<ECS::ComponentBase>();
-	w.RegisterComponent<ECS::Transform>();
-	
-	std::shared_ptr<ECS::SystemTest> aaa =  w.RegisterSystem<ECS::SystemTest>(ECS::ComponentBase(), ECS::Transform());
-
-	
 	using namespace ESGI;
 	
 	Application gameEngine;
