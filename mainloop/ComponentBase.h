@@ -5,12 +5,18 @@ namespace ECS
 
 	struct ComponentBase
 	{
-		//float x;
+		
+	};
+	
+	struct TranslationComponent : ComponentBase
+	{
+		float a;
 	};
 
-	struct Transform : ComponentBase
+	struct RotationComponent : ComponentBase
 	{
-		
+		float b;
+
 	};
 	
 }

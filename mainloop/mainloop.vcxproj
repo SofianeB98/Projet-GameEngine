@@ -150,6 +150,7 @@
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="GenericPool.cpp" />
+    <ClCompile Include="JobSystem.cpp" />
     <ClCompile Include="mainloop.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Timer.cpp" />
@@ -166,9 +167,9 @@
     <ClInclude Include="IComponentArray.h" />
     <ClInclude Include="InfraStructure.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="JobSystem.h" />
     <ClInclude Include="SystemBase.h" />
     <ClInclude Include="SystemManager.h" />
-    <ClInclude Include="SystemTest.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="World.h" />

@@ -2,6 +2,7 @@
 #include<set>
 #include "EcsBase.h"
 namespace ECS {
+	class World;
 
 	class SystemBase
 	{
@@ -11,7 +12,19 @@ namespace ECS {
 		virtual void OnCreate() {};
 		virtual void OnDestroy() {};
 		// Update Loop
-		virtual void Update(float dt) = 0;
+		virtual void Update(float dt, const World& world) = 0;
+	};
+
+	class SystemTest : public SystemBase
+	{	
+		virtual void Update(float dt, const World& world) final
+		{
+			/*JobSystem::Execute(
+				[]() {
+					std::cout << "System " << typeid(SystemTest).name() << " Executed";
+				}
+			);*/
+		}
 	};
 }
 

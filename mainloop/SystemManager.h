@@ -64,11 +64,11 @@ namespace ECS {
 			}
 		}
 
-		void UpdateSystem(float dt) const
+		void UpdateSystem(float dt, const World& world) const
 		{
 			for (auto const& sys : systems)
 			{
-				sys.second->Update(dt);
+				sys.second->Update(dt, world);
 			}
 		}
 
