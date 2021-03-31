@@ -30,7 +30,6 @@ namespace ECS
 		{
 			assert(this->entity_to_indexMap.find(e) == this->entity_to_indexMap.end(), "Component deja ajoute");
 
-			//assert(this->size < MAX_ENTITIES);
 			component.isNullComponent = false;
 			
 			size_t idx = this->size;

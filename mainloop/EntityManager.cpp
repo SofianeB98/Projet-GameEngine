@@ -5,7 +5,7 @@
 
 ECS::Entity ECS::EntityManager::CreateEntity()
 {
-	assert(this->current_living_entites < MAX_ENTITIES, "Trop d'entity existante !");
+	assert(this->current_living_entites < MAX_ENTITIES + 1, "Trop d'entity existante !");
 
 	Entity e = available_entities.front();
 	available_entities.pop();
@@ -18,7 +18,7 @@ ECS::Entity ECS::EntityManager::CreateEntity()
 
 void ECS::EntityManager::DestroyEntity(Entity e)
 {
-	assert(e < MAX_ENTITIES, "Entity inexistante");
+	assert(e < MAX_ENTITIES + 1, "Entity inexistante");
 
 	this->entities_unique_key[e].reset();
 	
@@ -30,14 +30,14 @@ void ECS::EntityManager::DestroyEntity(Entity e)
 
 void ECS::EntityManager::SetUniqueKey(Entity e, UniqueKey k)
 {
-	assert(e < MAX_ENTITIES, "Entity inexistante");
+	assert(e < MAX_ENTITIES + 1, "Entity inexistante");
 
 	this->entities_unique_key[e] = k;
 }
 
 ECS::UniqueKey ECS::EntityManager::GetUniqueKey(Entity e)
 {
-	assert(e < MAX_ENTITIES, "Entity inexistante");
+	assert(e < MAX_ENTITIES + 1, "Entity inexistante");
 
 	return this->entities_unique_key[e];
 }
