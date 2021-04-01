@@ -135,7 +135,10 @@ namespace ESGI
 			}
 			Engine& eng = m_context.Engine();
 			auto ent = eng.m_AIEngine->world->CreateEntity();
-			eng.m_AIEngine->world->AddComponent<ECS::RendererComponent>(ent, {Renderer().cubeVAO, Renderer().cubeVBO, Renderer().defaultShaderProgram});
+			eng.m_AIEngine->world->AddComponent<ECS::RendererComponent>(ent, 
+				{ m_context.Renderer().cubeVAO, 
+				m_context.Renderer().cubeVBO,
+				m_context.Renderer().defaultShaderProgram});
 			
 			// exemple de scheduling de deux fonctions (non membre, plus simple a faire)
 			// todo: event/delegate facon c# acceptant tout type de fonction.

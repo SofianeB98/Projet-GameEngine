@@ -26,8 +26,9 @@ namespace ESGI
 		GLShader defaultShader;
 		uint32_t defaultShaderProgram;
 
-		GLuint cubeVAO;
-		GLuint cubeVBO;
+		uint32_t cubeVAO;
+		uint32_t cubeVBO;
+		//uint32_t cubeIBO;
 		
 		GLFWwindow* windowsContext;
 

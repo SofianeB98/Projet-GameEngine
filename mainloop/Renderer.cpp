@@ -18,7 +18,7 @@ bool ESGI::Renderer::Initialize()
 		return false;
 	}
 
-	glfwSetInputMode(windowsContext, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // permet d'utiliser les input de la souris
+	glfwSetInputMode(windowsContext, GLFW_CURSOR, GLFW_CURSOR_NORMAL); // permet d'utiliser les input de la souris
 	/* Make the window's context current */
 	glfwMakeContextCurrent(windowsContext);
 
@@ -32,6 +32,8 @@ bool ESGI::Renderer::Initialize()
 	defaultShader.LoadVertexShader("defaultShader.vs.glsl");
 	defaultShader.Create();
 	defaultShaderProgram = defaultShader.GetProgram();
+
+	glUseProgram(defaultShaderProgram);
 	
 #ifdef WIN32
 	wglSwapIntervalEXT(1);
@@ -88,23 +90,29 @@ bool ESGI::Renderer::Initialize()
 		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
 	};
 
+
 	glGenVertexArrays(1, &cubeVAO);
 	glGenBuffers(1, &cubeVBO);
-
+	
 	glBindVertexArray(cubeVAO);
-
+	
 	glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
+	
+	int32_t positionLocation = glGetAttribLocation(defaultShaderProgram, "a_Position");
+	int32_t texcoordsLocation = glGetAttribLocation(defaultShaderProgram, "a_TexCoords");
+	
 	// position attribute
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(positionLocation);
 	// texture coord attribute
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(texcoordsLocation, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(texcoordsLocation);
 
-	glBindVertexArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	//glBindVertexArray(0);
+	
+	//glBindBuffer(GL_ARRAY_BUFFER, 0);
 	
 	return true;
 }
@@ -123,7 +131,7 @@ void ESGI::Renderer::PreUpdate()
 {
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+	
 	// Defini le viewport en pleine fenetre
 	glViewport(0, 0, WIDTH, HEIGHT);
 }

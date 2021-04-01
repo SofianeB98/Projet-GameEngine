@@ -45,22 +45,29 @@ void ECS::RendererSystem::Update(float dt, const World& world)
 	// Update all RD
 	// Entities<RendererComponent, translate...>
 
+
+	
 	for (auto& e : this->entities) 
 	{
 		std::cout << "Render system !! " << std::endl;
 		
-		auto rd = world.GetComponent<RendererComponent>(e);
+		const auto rd = world.GetComponent<RendererComponent>(e);
 		glUseProgram(rd.program);
+		
 		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, { 2.0f,  5.0f, -15.0f });
-		glm::mat4 view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-		glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)800 / (float)600, 0.1f, 100.0f);
-		glBindVertexArray(rd.VAO);
+		model = glm::translate(model, { 0.0f,  0.0f, 3.0f });
+		model = glm::rotate(model, glm::radians(55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		
+		glm::mat4 view = glm::mat4(1.0f);
+		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -6.0f));
+		glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)800 / (float)600, 0.03f, 1000.0f);
+
 
 		glUniformMatrix4fv(glGetUniformLocation(rd.program, "model"), 1, false, glm::value_ptr(model));
 		glUniformMatrix4fv(glGetUniformLocation(rd.program, "view"), 1, false, glm::value_ptr(view));
 		glUniformMatrix4fv(glGetUniformLocation(rd.program, "projection"), 1, false, glm::value_ptr(projection));
 
+		glBindVertexArray(rd.VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 	}
 	
