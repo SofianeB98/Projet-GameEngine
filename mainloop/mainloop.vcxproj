@@ -163,6 +163,7 @@
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="SystemBase.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="world.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\common\GLShader.h" />

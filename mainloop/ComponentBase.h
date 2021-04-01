@@ -8,25 +8,29 @@ namespace ECS
 		bool isNullComponent = true;
 	};
 	
-	struct TranslationComponent : ComponentBase
+	struct TransformComponent : ComponentBase
 	{
-		float4 value;
+		//float4 value;
+		glm::mat4 transform = glm::mat4(1.0f);
+		
 	};
 
-	struct RotationComponent : ComponentBase
+	struct MoveComponent : ComponentBase
 	{
-		float b;
-	};
+		float speed = 2.5f;
 
+		MoveComponent() = default;
+		MoveComponent(float sp) : speed(sp) {}
+	};
+	
 	struct RendererComponent : ComponentBase
 	{
-		uint32_t VBO;
 		uint32_t VAO;
 
 		uint32_t program;
 
 		RendererComponent() = default;
-		RendererComponent(uint32_t vao, uint32_t vbo, uint32_t prog) : VAO(vao), VBO(vbo), program(prog){}
+		RendererComponent(uint32_t vao, uint32_t vbo, uint32_t prog) : VAO(vao), program(prog){}
 	};
 	
 }

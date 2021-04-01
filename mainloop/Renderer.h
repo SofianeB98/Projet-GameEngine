@@ -28,7 +28,6 @@ namespace ESGI
 
 		uint32_t cubeVAO;
 		uint32_t cubeVBO;
-		//uint32_t cubeIBO;
 		
 		GLFWwindow* windowsContext;
 

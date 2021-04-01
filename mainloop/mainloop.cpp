@@ -23,6 +23,12 @@
 
 namespace ESGI
 {
+	template <typename T>
+	T clamp(T val, T min, T max)
+	{
+		return val > max ? max : val < min ? min : val;
+	}
+	
 	//
 	// fonctions globales
 	//
@@ -47,7 +53,7 @@ namespace ESGI
 	Engine& EngineContext::Engine() const { return engine; }
 	Renderer& EngineContext::Renderer() const { return renderer; }
 	// Renderer& EngineContext::Engine() const { return renderer; }
-	
+
 	// une map ou une recherche par identifiant dans un vector serait sans doute plus elegant et generique
 
 	//
@@ -115,7 +121,7 @@ namespace ESGI
 
 		void Destroy()
 		{
-			for (auto * core : make_reverse(m_cores)) {
+			for (auto* core : make_reverse(m_cores)) {
 #if defined(_DEBUG)
 				std::cout << "destroying core " << core->DebugName().c_str() << std::endl;
 #endif
@@ -130,16 +136,27 @@ namespace ESGI
 		{
 			JobSystem::Initialize();
 			bool allOk = true;
-			for (auto * core : m_cores) {
+			for (auto* core : m_cores) {
 				allOk &= core->Initialize();
 			}
 			Engine& eng = m_context.Engine();
-			auto ent = eng.m_AIEngine->world->CreateEntity();
-			eng.m_AIEngine->world->AddComponent<ECS::RendererComponent>(ent, 
-				{ m_context.Renderer().cubeVAO, 
-				m_context.Renderer().cubeVBO,
-				m_context.Renderer().defaultShaderProgram});
-			
+
+			for (size_t i = 0; i < 10000; i++)
+			{
+				auto ent = eng.m_AIEngine->world->CreateEntity();
+				
+				eng.m_AIEngine->world->AddComponent<ECS::RendererComponent>(ent,
+					{ m_context.Renderer().cubeVAO,
+					m_context.Renderer().cubeVBO,
+					m_context.Renderer().defaultShaderProgram });
+				
+				eng.m_AIEngine->world->AddComponent<ECS::TransformComponent>(ent,
+					{ });
+
+				eng.m_AIEngine->world->AddComponent<ECS::MoveComponent>(ent,
+					{ clamp((float)i * 0.0025f, 0.2f, 50.0f)});
+			}
+
 			// exemple de scheduling de deux fonctions (non membre, plus simple a faire)
 			// todo: event/delegate facon c# acceptant tout type de fonction.
 
@@ -154,7 +171,7 @@ namespace ESGI
 
 		void DeInitialize()
 		{
-			for (auto * core : make_reverse(m_cores)) {
+			for (auto* core : make_reverse(m_cores)) {
 				core->DeInitialize();
 			}
 		}
@@ -165,13 +182,13 @@ namespace ESGI
 			m_context.Renderer().PreUpdate();
 
 			m_context.Clock().Update();
-			
+
 			m_context.Input().Update();
-			
+
 			m_context.Engine().Update(m_context);
 
 			m_context.Renderer().Update();
-			
+
 			m_context.Renderer().PostUpdate();
 		}
 
@@ -185,19 +202,21 @@ namespace ESGI
 			}
 
 			m_needToQuit = !initOk;
+
+			m_context.Engine().Start();
 			
 			while (!m_needToQuit && !m_context.Renderer().WindowShouldClose())
 			{
-				std::cout << "[Application] frame # " << m_frameIndex << std::endl;
-				
+				//std::cout << "[Application] frame # " << m_frameIndex << std::endl;
+
 				Update();
-				
+
 				// emule un delai de traitement (une synchro verticale par ex.)
 				std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
 				m_needToQuit = m_context.Input().QuitButtonPressed;
 
-				m_frameIndex++;
+				//m_frameIndex++;
 			}
 
 			DeInitialize();
@@ -212,7 +231,7 @@ namespace ESGI
 int main(void)
 {
 	using namespace ESGI;
-	
+
 	Application gameEngine;
 
 	gameEngine.Run();

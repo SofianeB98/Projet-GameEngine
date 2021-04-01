@@ -63,6 +63,14 @@ namespace ECS {
 			}
 		}
 
+		void StartSystem(const World& world)
+		{
+			for (auto const& sys : systems)
+			{
+				sys.second->Start(world);
+			}
+		}
+		
 		void UpdateSystem(float dt, const World& world) const
 		{
 			for (auto const& sys : systems)

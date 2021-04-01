@@ -37,6 +37,11 @@ namespace ESGI
 				world->DeInitialize();
 				delete world;
 			}
+
+			void Start()
+			{
+				world->Start();
+			}
 			
 			void Update(float deltaTime)
 			{
@@ -60,6 +65,11 @@ namespace ESGI
 
 		void DeInitialize() final;
 
+		void Start()
+		{
+			this->m_AIEngine->Start();
+		}
+		
 		// ce n'est pas une fonction virtuelle !
 		void Update(EngineContext& context);
 

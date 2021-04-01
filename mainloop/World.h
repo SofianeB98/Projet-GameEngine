@@ -25,26 +25,21 @@ namespace ECS
 
 			// Ensuite on va register tout les System connu
 			//this->RegisterSystem<ECS::SystemTest>(ECS::TranslationComponent(), ECS::RotationComponent());
-			this->RegisterSystem<ECS::RendererSystem>(ECS::RendererComponent());
+			this->RegisterSystem<ECS::RendererSystem>(ECS::RendererComponent(), ECS::TransformComponent());
+			this->RegisterSystem<ECS::TranslationSystem>(ECS::TransformComponent(), ECS::MoveComponent());
 		}
 
+		void Start()
+		{
+			system_manager->StartSystem(*this);
+		}
+		
 		void Update(float deltaTime)
 		{
 			system_manager->UpdateSystem(deltaTime, *this);
 		}
 		
-		void DeInitialize()
-		{
-			// DeInitialize all
-			this->system_manager->DeInitialize();
-			this->component_manager->DeInitialize();
-			this->entity_manager->DeInitialize();
-			
-			// Delete all
-			delete system_manager.release();
-			delete component_manager.release();
-			delete entity_manager.release();
-		}
+		void DeInitialize();
 		
 #pragma region Entity
 		Entity CreateEntity() const

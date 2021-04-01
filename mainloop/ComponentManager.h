@@ -28,9 +28,9 @@ namespace ECS
 		void Initialize()
 		{
 			// On register tout les components de base
-			this->RegisterComponent<ECS::TranslationComponent>();
-			this->RegisterComponent<ECS::RotationComponent>();
+			this->RegisterComponent<ECS::TransformComponent>();
 			this->RegisterComponent<ECS::RendererComponent>();
+			this->RegisterComponent<ECS::MoveComponent>();
 		}
 		
 		void DeInitialize()
