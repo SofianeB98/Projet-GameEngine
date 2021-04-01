@@ -171,6 +171,8 @@ namespace ESGI
 
 		void DeInitialize()
 		{
+			JobSystem::Wait();
+			
 			for (auto* core : make_reverse(m_cores)) {
 				core->DeInitialize();
 			}
