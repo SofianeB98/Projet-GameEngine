@@ -30,7 +30,7 @@ namespace ECS
 		uint32_t program;
 
 		RendererComponent() = default;
-		RendererComponent(uint32_t vao, uint32_t vbo, uint32_t prog) : VAO(vao), program(prog){}
+		RendererComponent(uint32_t vao, uint32_t prog) : VAO(vao), program(prog){}
 	};
 	
 }

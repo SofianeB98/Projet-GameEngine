@@ -8,7 +8,7 @@ namespace ECS
 	// En ecs, une entity est juste un ID
 	// de 0 à max
 	using Entity = std::uint32_t;
-	const Entity MAX_ENTITIES = 10000;
+	const Entity MAX_ENTITIES = 20000;
 	const Entity NULL_ENTITY = 0;
 
 	// Defini l'id d'un component

@@ -63,7 +63,7 @@ namespace ECS {
 			}
 		}
 
-		void StartSystem(const World& world)
+		void StartSystem(World& world)
 		{
 			for (auto const& sys : systems)
 			{
@@ -71,7 +71,7 @@ namespace ECS {
 			}
 		}
 		
-		void UpdateSystem(float dt, const World& world) const
+		void UpdateSystem(float dt, World& world) const
 		{
 			for (auto const& sys : systems)
 			{

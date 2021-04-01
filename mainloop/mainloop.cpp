@@ -67,7 +67,7 @@ namespace ESGI
 
 		// les references sont plus complexes a initialiser (via le constructeur seulement)
 		EngineContext& m_context;
-
+		
 		uint64_t m_frameIndex = 0;
 
 		bool m_needToQuit = false;
@@ -147,7 +147,6 @@ namespace ESGI
 				
 				eng.m_AIEngine->world->AddComponent<ECS::RendererComponent>(ent,
 					{ m_context.Renderer().cubeVAO,
-					m_context.Renderer().cubeVBO,
 					m_context.Renderer().defaultShaderProgram });
 				
 				eng.m_AIEngine->world->AddComponent<ECS::TransformComponent>(ent,
@@ -192,6 +191,8 @@ namespace ESGI
 			m_context.Renderer().Update();
 
 			m_context.Renderer().PostUpdate();
+
+			m_context.Engine().PostUpdate();
 		}
 
 		// main loop

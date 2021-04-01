@@ -77,4 +77,10 @@ namespace ESGI {
 		ProcessSystems(elapsedTime);
 	}
 
+	void Engine::PostUpdate()
+	{
+		this->m_AIEngine->PostUpdate();
+	}
+
+
 }

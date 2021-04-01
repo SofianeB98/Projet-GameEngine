@@ -12,10 +12,14 @@ namespace ECS
 		std::unique_ptr<EntityManager> entity_manager;
 		std::unique_ptr<ComponentManager> component_manager;
 		std::unique_ptr<SystemManager> system_manager;
-		
+
+		std::vector<Entity> entity_to_destroy;
+
 	public:
 		void Initialize()
 		{
+			//this->entity_to_destroy.reserve(MAX_ENTITIES);
+			
 			this->entity_manager = std::make_unique<EntityManager>();
 			this->component_manager = std::make_unique<ComponentManager>();
 			this->system_manager = std::make_unique<SystemManager>();
@@ -33,29 +37,39 @@ namespace ECS
 		{
 			system_manager->StartSystem(*this);
 		}
-		
+
 		void Update(float deltaTime)
 		{
 			system_manager->UpdateSystem(deltaTime, *this);
 		}
-		
+
+		void PostUpdate()
+		{
+			for (auto e : entity_to_destroy)
+			{
+				this->entity_manager->DestroyEntity(e);
+				this->component_manager->EntityDestroyed(e);
+				this->system_manager->EntityDestroyed(e);
+			}
+			entity_to_destroy.clear();
+		}
+
 		void DeInitialize();
-		
+
 #pragma region Entity
 		Entity CreateEntity() const
 		{
 			return this->entity_manager->CreateEntity();
 		}
 
-		void DestroyEntity(Entity e) const
+		void DestroyEntity(Entity e)
 		{
-			this->entity_manager->DestroyEntity(e);
-			this->component_manager->EntityDestroyed(e);
-			this->system_manager->EntityDestroyed(e);
+			if(std::find(entity_to_destroy.begin(), entity_to_destroy.end(), e) == entity_to_destroy.end())
+				entity_to_destroy.push_back(e);
 		}
 #pragma endregion 
 
-		
+
 #pragma region Component
 		template <typename T>
 		void RegisterComponent()
@@ -116,19 +130,19 @@ namespace ECS
 
 			for (auto it = used_entities.begin(); it != used_entities.end(); ++it)
 			{
-				if(*it == NULL_ENTITY)
+				if (*it == NULL_ENTITY)
 					continue;
 
 				if (HasComponent<T>(*it))
 					entitiesWithT.push_back(*it);
 			}
 
-			
+
 			return entitiesWithT;
 		}
 #pragma endregion
 
-		
+
 #pragma region System
 	private:
 		template <typename T>
@@ -150,29 +164,29 @@ namespace ECS
 			std::cout << "Requierement : " << typeid(value).name() << std::endl;
 
 			k.set(GetComponentType<T>(), true);
-			
+
 			return SetUniqueKey(k, c...);
 		}
-		
-		
+
+
 	public:
 		template <typename T, typename U, typename ...C>
 		std::shared_ptr<T> RegisterSystem(U value, C ...c)
 		{
 			auto sys = this->system_manager->RegisterSystem<T>();
-			
+
 			std::cout << "Je commence a cree la key du system " << typeid(T).name() << std::endl;
 			UniqueKey key;
 			key = SetUniqueKey(key, value, c...);
 
-			
+
 			SetSystemUniqueKey<T>(key);
-			
+
 			return sys;
 		}
 
-		
+
 #pragma endregion 
-		
+
 	};
 }

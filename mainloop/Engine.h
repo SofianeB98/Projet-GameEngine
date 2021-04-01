@@ -52,6 +52,11 @@ namespace ESGI
 			{
 				
 			}
+
+			void PostUpdate()
+			{
+				world->PostUpdate();
+			}
 		};
 		
 		// simple exemple, ou alors un vector ou une liste simplement chainee (intrusive) de systems
@@ -73,5 +78,6 @@ namespace ESGI
 		// ce n'est pas une fonction virtuelle !
 		void Update(EngineContext& context);
 
+		void PostUpdate();
 	};
 }
