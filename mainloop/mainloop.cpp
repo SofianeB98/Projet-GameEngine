@@ -141,7 +141,7 @@ namespace ESGI
 			}
 			Engine& eng = m_context.Engine();
 
-			for (size_t i = 0; i < 10000; i++)
+			for (size_t i = 0; i < 1600; i++)
 			{
 				auto ent = eng.m_AIEngine->world->CreateEntity();
 				
@@ -152,8 +152,8 @@ namespace ESGI
 				eng.m_AIEngine->world->AddComponent<ECS::TransformComponent>(ent,
 					{ });
 
-				eng.m_AIEngine->world->AddComponent<ECS::MoveComponent>(ent,
-					{ clamp((float)i * 0.0025f, 0.2f, 50.0f)});
+				eng.m_AIEngine->world->AddComponent<ECS::AgentFlockComponent>(ent,
+					{ });
 			}
 
 			// exemple de scheduling de deux fonctions (non membre, plus simple a faire)

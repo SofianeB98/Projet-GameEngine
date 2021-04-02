@@ -16,22 +16,7 @@ namespace ECS
 		std::vector<Entity> entity_to_destroy;
 
 	public:
-		void Initialize()
-		{
-			//this->entity_to_destroy.reserve(MAX_ENTITIES);
-			
-			this->entity_manager = std::make_unique<EntityManager>();
-			this->component_manager = std::make_unique<ComponentManager>();
-			this->system_manager = std::make_unique<SystemManager>();
-
-			// Le component manager va register tout les component deja connu
-			this->component_manager->Initialize();
-
-			// Ensuite on va register tout les System connu
-			//this->RegisterSystem<ECS::SystemTest>(ECS::TranslationComponent(), ECS::RotationComponent());
-			this->RegisterSystem<ECS::RendererSystem>(ECS::RendererComponent(), ECS::TransformComponent());
-			this->RegisterSystem<ECS::TranslationSystem>(ECS::TransformComponent(), ECS::MoveComponent());
-		}
+		void Initialize();
 
 		void Start()
 		{

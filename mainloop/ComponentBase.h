@@ -32,5 +32,12 @@ namespace ECS
 		RendererComponent() = default;
 		RendererComponent(uint32_t vao, uint32_t prog) : VAO(vao), program(prog){}
 	};
+
+	struct AgentFlockComponent : ComponentBase
+	{
+		glm::vec3 agent_dir = glm::vec3(0.0f, 0.0f, 1.0f);
+		float drive_factor = 20.0f;
+		float max_speed = 10.0f;
+	};
 	
 }

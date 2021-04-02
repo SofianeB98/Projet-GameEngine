@@ -31,6 +31,7 @@ namespace ECS
 			this->RegisterComponent<ECS::TransformComponent>();
 			this->RegisterComponent<ECS::RendererComponent>();
 			this->RegisterComponent<ECS::MoveComponent>();
+			this->RegisterComponent<ECS::AgentFlockComponent>();
 		}
 		
 		void DeInitialize()
