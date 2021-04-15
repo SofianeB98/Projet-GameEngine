@@ -60,5 +60,17 @@ namespace ECS {
 		virtual void Start(World& world) final;
 		virtual void Update(float dt, World& world) final;
 	};
+
+	class FlockAgentSpawnerSystem : public SystemBase
+	{
+		
+	};
+	
+	class LifeTimeSystem : public SystemBase
+	{
+	public:
+		void Start(World& world) final;
+		void Update(float dt, World& world) final;
+	};
 }
 

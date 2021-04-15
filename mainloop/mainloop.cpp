@@ -16,6 +16,7 @@
 
 
 #include <iostream>
+#include <random>
 #include <vector>
 #include <thread>
 #include "JobSystem.h"
@@ -141,7 +142,11 @@ namespace ESGI
 			}
 			Engine& eng = m_context.Engine();
 
-			for (size_t i = 0; i < 1600; i++)
+			unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+			std::mt19937 generator(seed);
+			std::uniform_real_distribution<double> uniform01(0.0, 1.0);
+			
+			for (size_t i = 0; i < 200; i++)
 			{
 				auto ent = eng.m_AIEngine->world->CreateEntity();
 				
@@ -154,6 +159,9 @@ namespace ESGI
 
 				eng.m_AIEngine->world->AddComponent<ECS::AgentFlockComponent>(ent,
 					{ });
+				
+				eng.m_AIEngine->world->AddComponent<ECS::LifeTimeComponent>(ent,
+					{ (float)uniform01(generator) * 10.0f + 0.5f, (float)uniform01(generator) * 5.0f + 0.5f });
 			}
 
 			// exemple de scheduling de deux fonctions (non membre, plus simple a faire)

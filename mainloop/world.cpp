@@ -12,9 +12,8 @@ void ECS::World::Initialize()
 	// Ensuite on va register tout les System connu
 	this->RegisterSystem<ECS::FlockSystem>(ECS::TransformComponent(), ECS::AgentFlockComponent());
 	this->RegisterSystem<ECS::TranslationSystem>(ECS::TransformComponent(), ECS::AgentFlockComponent());
+	this->RegisterSystem<ECS::LifeTimeSystem>(ECS::LifeTimeComponent(), ECS::RendererComponent());
 	this->RegisterSystem<ECS::RendererSystem>(ECS::RendererComponent(), ECS::TransformComponent());
-
-	
 }
 
 

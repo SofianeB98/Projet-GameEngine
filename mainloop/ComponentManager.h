@@ -30,7 +30,10 @@ namespace ECS
 			// On register tout les components de base
 			this->RegisterComponent<ECS::TransformComponent>();
 			this->RegisterComponent<ECS::RendererComponent>();
+
+			
 			this->RegisterComponent<ECS::MoveComponent>();
+			this->RegisterComponent<ECS::LifeTimeComponent>();
 			this->RegisterComponent<ECS::AgentFlockComponent>();
 		}
 		

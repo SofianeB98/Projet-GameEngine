@@ -52,6 +52,11 @@ namespace ECS
 			if(std::find(entity_to_destroy.begin(), entity_to_destroy.end(), e) == entity_to_destroy.end())
 				entity_to_destroy.push_back(e);
 		}
+
+		uint32_t GetLivingEntitie() const
+		{
+			return this->entity_manager->GetLivingEntities();
+		}
 #pragma endregion 
 
 

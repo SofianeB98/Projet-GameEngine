@@ -69,7 +69,7 @@ namespace ECS
 					const auto& move = world.GetComponent<AgentFlockComponent>(e);
 
 					translation.transform = glm::translate(translation.transform, dt * move.agent_dir);
-
+					
 					//const auto& move = world.GetComponent<MoveComponent>(e);
 
 					//translation.transform = glm::translate(translation.transform, { 0.0f, dt * move.speed, 0.0f });
@@ -158,6 +158,9 @@ namespace ECS
 		// Update all RD
 		// Entities<RendererComponent, translate...>
 
+		// TODO : Système pour la caméra, afin de se déplacer dans l'espace 3D
+		// TODO : Système de vie sur un agent afin d'ajouter du dynamisme
+		
 		glm::mat4 view = glm::mat4(1.0f);
 		//view = glm::translate(view, glm::vec3(0.0f, .0f, -30.0f));
 		view = glm::lookAt(glm::vec3(0.0f, 20.f, 50.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -169,11 +172,27 @@ namespace ECS
 			const auto& tr = world.GetComponent<TransformComponent>(e);
 			glUseProgram(rd.program);
 
+			auto matloc = glGetUniformLocation(rd.program, "u_Material.AmbientColor");
+			glUniform3f(matloc, rd.AmbientColor.r, rd.AmbientColor.g, rd.AmbientColor.b);
+
+			matloc = glGetUniformLocation(rd.program, "u_Material.DiffuseColor");
+			glUniform3f(matloc, rd.DiffuseColor.r, rd.DiffuseColor.g, rd.DiffuseColor.b);
+
+			matloc = glGetUniformLocation(rd.program, "u_Material.SpecularColor");
+			glUniform3f(matloc, rd.SpecularColor.r, rd.SpecularColor.g, rd.SpecularColor.b);
+
+			matloc = glGetUniformLocation(rd.program, "u_Material.Shininess");
+			glUniform1f(matloc, rd.Shininess);
+
+			matloc = glGetUniformLocation(rd.program, "u_Material.Metalness");
+			glUniform1f(matloc, rd.Metalness);
 
 			glUniformMatrix4fv(glGetUniformLocation(rd.program, "model"), 1, false, glm::value_ptr(tr.transform));
 			glUniformMatrix4fv(glGetUniformLocation(rd.program, "view"), 1, false, glm::value_ptr(view));
 			glUniformMatrix4fv(glGetUniformLocation(rd.program, "projection"), 1, false, glm::value_ptr(projection));
 
+			glUniform3f(glGetUniformLocation(rd.program, "u_viewPos"), view[3][0], view[3][1], view[3][2]);
+			
 			glBindVertexArray(rd.VAO);
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
@@ -368,6 +387,34 @@ namespace ECS
 
 	// =======================================================
 
+	void LifeTimeSystem::Start(World& world)
+	{
+		
+	}
+
+	void LifeTimeSystem::Update(float dt, World& world)
+	{
+		for (auto& e : entities)
+		{
+			auto& ltc = world.GetComponent<LifeTimeComponent>(e);
+			ltc.life -= dt * ltc.speed_lose_life;
+
+			float ratio = ltc.life / ltc.start_life;
+			
+			auto& rd = world.GetComponent<RendererComponent>(e);
+			rd.DiffuseColor.r *= ratio;
+			rd.DiffuseColor.g *= ratio;
+			rd.DiffuseColor.b *= ratio;
+
+			rd.AmbientColor.r *= ratio;
+			rd.AmbientColor.g *= ratio;
+			rd.AmbientColor.b *= ratio;
+			
+			if (ltc.life <= 0.01f)
+				world.DestroyEntity(e);
+		}
+	}
 
 
+	// =======================================================
 }

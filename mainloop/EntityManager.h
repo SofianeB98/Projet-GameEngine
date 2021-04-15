@@ -32,6 +32,10 @@ namespace ECS
 				this->available_entities.push(e);
 		}
 
+		uint32_t GetLivingEntities()const
+		{
+			return this->current_living_entites;
+		}
 
 		Entity CreateEntity();
 		void DestroyEntity(Entity e);
