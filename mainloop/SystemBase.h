@@ -63,7 +63,12 @@ namespace ECS {
 
 	class FlockAgentSpawnerSystem : public SystemBase
 	{
+		const uint32_t max_entities_to_spawn = 50;
+		const float spawn_delay = 2.0f;
+		float current_delay = 0.0f;
 		
+		virtual void Start(World& world) final;
+		virtual void Update(float dt, World& world) final;
 	};
 	
 	class LifeTimeSystem : public SystemBase

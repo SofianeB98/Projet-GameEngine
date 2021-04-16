@@ -196,7 +196,15 @@ namespace ESGI
 
 			m_context.Engine().Update(m_context);
 
-			m_context.Renderer().Update();
+			double elapsedTime = m_context.clock.ElapsedTime;
+
+			// tout lag est maximise 100 ms (1/10 de seconde)
+			// cela permet d'eviter de faire sauter le moteur en cas de breakpoint ou lag enorme
+			// alternativement on peut appliquer une correction en extrapolant a partir du temps ecoule 
+			if (elapsedTime > 0.10)
+				elapsedTime = 0.10;
+			
+			m_context.Renderer().Update(elapsedTime);
 
 			m_context.Renderer().PostUpdate();
 

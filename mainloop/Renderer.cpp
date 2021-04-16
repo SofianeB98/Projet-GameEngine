@@ -1,7 +1,85 @@
 ﻿#include "Renderer.h"
+#include "EcsBase.h"
 
+#define _USE_MATH_DEFINES 1
+#include <math.h>
 
 #define BUFFER_OFFSET(i) ((void*)(i))
+
+void ESGI::Renderer::cursor_callback(GLFWwindow* window, double xpos, double ypos)
+{
+	int state = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
+
+	if (state == GLFW_RELEASE)
+	{
+		lastXPos = xpos;
+		lastYPos = ypos;
+		return;
+	}
+
+	if (firstMouse) // initially set to true
+	{
+		lastXPos = xpos;
+		lastYPos = ypos;
+		firstMouse = false;
+	}
+
+	float xoffset = xpos - lastXPos;
+	float yoffset = lastYPos - ypos;
+	lastXPos = xpos;
+	lastYPos = ypos;
+
+	xoffset *= sensitivityMoveCam;
+	yoffset *= sensitivityMoveCam;
+
+	theta += yoffset;
+	phi += xoffset;
+
+	if (phi > 180.0f)
+		phi = -180.0f;
+	if (phi < -180.0f)
+		phi = 180.0f;
+
+	if (theta > 89.0f)
+		theta = 89.0;
+	if (theta < -89.0f)
+		theta = -89.0;
+
+	float newTheta = theta * M_PI / 180.0f;
+	float newPhi = phi * M_PI / 180.0f;
+
+	glm::vec3 newpos(distanceBetweenCamAndTarget * std::cos(newTheta) * std::cos(newPhi),
+		distanceBetweenCamAndTarget * std::sin(newTheta),
+		distanceBetweenCamAndTarget * std::cos(newTheta) * std::sin(newPhi));
+
+	camFront = glm::normalize(newpos);
+	
+	view = glm::lookAt(camTarget + camFront * distanceBetweenCamAndTarget, camTarget, glm::vec3(0.0f, 1.0f, 0.0f));
+}
+
+void ESGI::Renderer::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+	Renderer* rd = (Renderer*)glfwGetWindowUserPointer(window);
+	
+	if (rd->distanceBetweenCamAndTarget >= rd->zoomMax - 0.1f && yoffset < 0)
+		return;
+
+	if (rd->distanceBetweenCamAndTarget <= rd->zoomMin + 0.1f && yoffset > 0)
+		return;
+
+	rd->distanceBetweenCamAndTarget -= yoffset * rd->sensitivityZoomCam;
+
+	float newTheta = rd->theta * M_PI / 180.0f;
+	float newPhi = rd->phi * M_PI / 180.0f;
+
+	glm::vec3 newpos(rd->distanceBetweenCamAndTarget * std::cos(newTheta) * std::cos(newPhi),
+		rd->distanceBetweenCamAndTarget * std::sin(newTheta),
+		rd->distanceBetweenCamAndTarget * std::cos(newTheta) * std::sin(newPhi));
+
+	rd->camFront = glm::normalize(newpos);
+
+	rd->view = glm::lookAt(rd->camTarget + rd->camFront * rd->distanceBetweenCamAndTarget, rd->camTarget, glm::vec3(0.0f, 1.0f, 0.0f));
+}
 
 bool ESGI::Renderer::Initialize()
 {
@@ -18,9 +96,14 @@ bool ESGI::Renderer::Initialize()
 		return false;
 	}
 
-	glfwSetInputMode(windowsContext, GLFW_CURSOR, GLFW_CURSOR_NORMAL); // permet d'utiliser les input de la souris
 	/* Make the window's context current */
 	glfwMakeContextCurrent(windowsContext);
+
+	// Passe l'adresse de notre application a la fenetre
+	glfwSetWindowUserPointer(windowsContext, &(*this));
+	
+	glfwSetScrollCallback(windowsContext, scroll_callback);
+	glfwSetInputMode(windowsContext, GLFW_CURSOR, GLFW_CURSOR_NORMAL); // permet d'utiliser les input de la souris
 
 	GLenum error = glewInit();
 	if (error != GLEW_OK) {
@@ -32,7 +115,7 @@ bool ESGI::Renderer::Initialize()
 	defaultShader.LoadVertexShader("defaultShader.vs.glsl");
 	defaultShader.Create();
 	defaultShaderProgram = defaultShader.GetProgram();
-
+	
 	glUseProgram(defaultShaderProgram);
 	
 #ifdef WIN32
@@ -116,6 +199,10 @@ bool ESGI::Renderer::Initialize()
 	//glBindVertexArray(0);
 	
 	//glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	//view = glm::lookAt(glm::vec3(0.0f, 20.f, 50.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	view = glm::lookAt(camTarget + camFront * distanceBetweenCamAndTarget, camTarget, glm::vec3(0.0f, 1.0f, 0.0f));
+	projection = glm::perspective(glm::radians(60.0f), (float)WIDTH / (float)HEIGHT, 0.03f, 1000.0f);
 	
 	return true;
 }
@@ -140,9 +227,19 @@ void ESGI::Renderer::PreUpdate()
 }
 
 
-void ESGI::Renderer::Update()
+void ESGI::Renderer::Update(float dt)
 {
-	// To some stuff ?
+	// Do some stuff ?
+	double xpos, ypos;
+	//getting cursor position
+	glfwGetCursorPos(windowsContext, &xpos, &ypos);
+	
+	cursor_callback(windowsContext, xpos, ypos);
+	
+	glUniformMatrix4fv(glGetUniformLocation(defaultShaderProgram, "view"), 1, false, glm::value_ptr(view));
+	glUniformMatrix4fv(glGetUniformLocation(defaultShaderProgram, "projection"), 1, false, glm::value_ptr(projection));
+
+	glUniform3f(glGetUniformLocation(defaultShaderProgram, "u_viewPos"), view[3][0], view[3][1], view[3][2]);
 }
 
 

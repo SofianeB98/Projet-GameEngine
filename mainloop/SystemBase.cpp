@@ -69,7 +69,6 @@ namespace ECS
 					const auto& move = world.GetComponent<AgentFlockComponent>(e);
 
 					translation.transform = glm::translate(translation.transform, dt * move.agent_dir);
-					
 					//const auto& move = world.GetComponent<MoveComponent>(e);
 
 					//translation.transform = glm::translate(translation.transform, { 0.0f, dt * move.speed, 0.0f });
@@ -158,14 +157,6 @@ namespace ECS
 		// Update all RD
 		// Entities<RendererComponent, translate...>
 
-		// TODO : Système pour la caméra, afin de se déplacer dans l'espace 3D
-		// TODO : Système de vie sur un agent afin d'ajouter du dynamisme
-		
-		glm::mat4 view = glm::mat4(1.0f);
-		//view = glm::translate(view, glm::vec3(0.0f, .0f, -30.0f));
-		view = glm::lookAt(glm::vec3(0.0f, 20.f, 50.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		glm::mat4 projection = glm::perspective(glm::radians(60.0f), (float)800 / (float)600, 0.03f, 1000.0f);
-
 		for (auto& e : this->entities)
 		{
 			const auto& rd = world.GetComponent<RendererComponent>(e);
@@ -188,18 +179,15 @@ namespace ECS
 			glUniform1f(matloc, rd.Metalness);
 
 			glUniformMatrix4fv(glGetUniformLocation(rd.program, "model"), 1, false, glm::value_ptr(tr.transform));
-			glUniformMatrix4fv(glGetUniformLocation(rd.program, "view"), 1, false, glm::value_ptr(view));
+			
+			/*glUniformMatrix4fv(glGetUniformLocation(rd.program, "view"), 1, false, glm::value_ptr(view));
 			glUniformMatrix4fv(glGetUniformLocation(rd.program, "projection"), 1, false, glm::value_ptr(projection));
 
-			glUniform3f(glGetUniformLocation(rd.program, "u_viewPos"), view[3][0], view[3][1], view[3][2]);
+			glUniform3f(glGetUniformLocation(rd.program, "u_viewPos"), view[3][0], view[3][1], view[3][2]);*/
 			
 			glBindVertexArray(rd.VAO);
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
-
-
-
-
 	}
 
 	// =======================================================
@@ -400,21 +388,125 @@ namespace ECS
 			ltc.life -= dt * ltc.speed_lose_life;
 
 			float ratio = ltc.life / ltc.start_life;
-			
-			auto& rd = world.GetComponent<RendererComponent>(e);
-			rd.DiffuseColor.r *= ratio;
-			rd.DiffuseColor.g *= ratio;
-			rd.DiffuseColor.b *= ratio;
 
-			rd.AmbientColor.r *= ratio;
-			rd.AmbientColor.g *= ratio;
-			rd.AmbientColor.b *= ratio;
+			if(ratio <= 0.25f)
+			{
+				float realRatio = ratio / 0.25f;
+				auto& rd = world.GetComponent<RendererComponent>(e);
+				rd.DiffuseColor.r *= realRatio;
+				rd.DiffuseColor.g *= realRatio;
+				rd.DiffuseColor.b *= realRatio;
+
+				rd.AmbientColor.r *= realRatio;
+				rd.AmbientColor.g *= realRatio;
+				rd.AmbientColor.b *= realRatio;
+			}
 			
-			if (ltc.life <= 0.01f)
+			if (ltc.life < 0.1f)
 				world.DestroyEntity(e);
 		}
 	}
 
+	// =======================================================
+
+	void FlockAgentSpawnerSystem::Start(World& world)
+	{
+		
+	}
+
+	void FlockAgentSpawnerSystem::Update(float dt, World& world)
+	{	
+		if (world.GetLivingEntities() >= MAX_ENTITIES)
+			return;
+
+		if(current_delay < spawn_delay)
+		{
+			current_delay += dt;
+			//std::cout << current_delay << std::endl;
+			return;
+		}
+
+		current_delay -= spawn_delay;
+		
+		float radius = 20.0f;
+		unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+		std::mt19937 generator(seed);
+		std::uniform_real_distribution<double> uniform01(0.0, 1.0);
+
+		uint32_t entityToCreate = MAX_ENTITIES - world.GetLivingEntities();
+		entityToCreate = entityToCreate > max_entities_to_spawn ? max_entities_to_spawn : entityToCreate;
+		
+		Entity refEntity = world.FindEntityWith<RendererComponent>();
+		if (refEntity == NULL_ENTITY)
+			return;
+		
+		const auto& rdC = world.GetComponent<RendererComponent>(refEntity);
+		
+		for (uint32_t i = 0; i < entityToCreate; ++i)
+		{
+			Entity ent = world.CreateEntity();
+			world.AddComponent<ECS::RendererComponent>(ent,
+				{rdC.VAO, rdC.program});
+
+			auto& rd = world.GetComponent<RendererComponent>(ent);
+			rd.AmbientColor = glm::vec3(uniform01(generator), uniform01(generator), uniform01(generator));
+			rd.DiffuseColor = glm::vec3(uniform01(generator), uniform01(generator), uniform01(generator));
+			
+			world.AddComponent<ECS::TransformComponent>(ent,
+				{ });
+			
+			// incorrect way
+			double theta = 2 * std::_Pi * uniform01(generator);
+			double phi = acos(1 - 2 * uniform01(generator));
+
+			double in_rd = radius * uniform01(generator);
+
+			double x = sin(phi) * cos(theta) * in_rd;
+			double y = sin(phi) * sin(theta) * in_rd;
+			double z = cos(phi) * in_rd;
+
+			auto& tr = world.GetComponent<TransformComponent>(ent);
+			tr.transform = glm::mat4(1.0f);
+			tr.transform = glm::translate(tr.transform, { x, y, z });
+			tr.transform = glm::scale(tr.transform, { 0.66f, 0.66f, 0.66f });
+			
+			world.AddComponent<ECS::AgentFlockComponent>(ent,
+				{ });
+			auto& afc = world.GetComponent<AgentFlockComponent>(ent);
+			//afc.max_speed = uniform01(generator) * 20.0f;
+			//afc.drive_factor = uniform01(generator) * 50.0f;
+			afc.agent_dir = glm::normalize(glm::vec3(uniform01(generator), uniform01(generator), uniform01(generator)));
+			world.AddComponent<ECS::LifeTimeComponent>(ent,
+				{ (float)uniform01(generator) * 50.0f + 0.5f, (float)uniform01(generator) * 8.0f + 1.0f });
+		}
+
+		std::cout << "Created !! Current living entities : " << world.GetLivingEntities() << std::endl;
+		
+	}
 
 	// =======================================================
 }
+
+/*
+ *
+ * float radius = 20.0f;
+		unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+		std::mt19937 generator(seed);
+		std::uniform_real_distribution<double> uniform01(0.0, 1.0);
+
+			// incorrect way
+			double theta = 2 * std::_Pi * uniform01(generator);
+			double phi = acos(1 - 2 * uniform01(generator));
+
+			double in_rd = radius * uniform01(generator);
+
+			double x = sin(phi) * cos(theta) * in_rd;
+			double y = sin(phi) * sin(theta) * in_rd;
+			double z = cos(phi) * in_rd;
+
+			auto& tr = world.GetComponent<TransformComponent>(e);
+			tr.transform = glm::mat4(1.0f);
+			tr.transform = glm::translate(tr.transform, { x, y, z });
+			tr.transform = glm::scale(tr.transform, { 0.5f, 0.5f, 0.5f });
+		
+ */
